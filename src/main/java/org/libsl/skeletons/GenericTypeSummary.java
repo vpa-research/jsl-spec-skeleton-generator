@@ -19,8 +19,4 @@ final class GenericTypeSummary {
     GenericTypeSummary(final String simpleType) {
         this(simpleType, NO_TYPE_ARGUMENTS);
     }
-
-    public String typeArgsAsString() {
-        return String.join(", ", typeArgs);
-    }
 }

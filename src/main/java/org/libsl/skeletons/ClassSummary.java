@@ -1,5 +1,6 @@
 package org.libsl.skeletons;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 final class ClassSummary {
@@ -13,9 +14,9 @@ final class ClassSummary {
     public final Map<String, VariableSummary> specialConstants = new TreeMap<>();
 
     private final Map<String, Integer> overloadCounter = new HashMap<>();
-    public final Set<String> allGenericTypeVariables = new TreeSet<>();
+    public final Map<String, Type[]> allGenericTypeVariables = new LinkedHashMap<>();
 
-    public ClassSummary(String name, String typeName) {
+    public ClassSummary(final String name, final String typeName) {
         this.simpleName = name;
         this.typeName = typeName;
     }

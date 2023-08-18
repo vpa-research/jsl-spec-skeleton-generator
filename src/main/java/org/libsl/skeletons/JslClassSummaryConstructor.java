@@ -5,6 +5,7 @@ import sun.misc.Unsafe;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 final class JslClassSummaryConstructor {
     private final Class<?> source;
@@ -35,6 +36,12 @@ final class JslClassSummaryConstructor {
         return in.replaceAll(regex, source.getSimpleName());
     }
 
+    private Collection<String> genericsFilter(final Collection<String> in) {
+        return in.stream()
+                .map(this::genericsFilter)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     private void collectParameters(final MethodSummary method,
                                    final Parameter[] parameters,
                                    final Type[] genericParameterTypes) {
@@ -53,7 +60,7 @@ final class JslClassSummaryConstructor {
 
             // add annotations
             if (paramSummary.hasTypeArguments) {
-                final var filteredStr = genericsFilter(paramSummary.typeArgsAsString());
+                final var filteredStr = genericsFilter(paramSummary.typeArgs);
                 paramVar.annotations.add(Annotations.mkGeneric(filteredStr));
             }
         }
@@ -128,7 +135,7 @@ final class JslClassSummaryConstructor {
 
             // generics in return type
             if (retTypeSummary.hasTypeArguments) {
-                final var filteredStr = genericsFilter(retTypeSummary.typeArgsAsString());
+                final var filteredStr = genericsFilter(retTypeSummary.typeArgs);
                 methodSummary.annotations.add(Annotations.mkGenericResult(filteredStr));
             }
 
@@ -201,8 +208,8 @@ final class JslClassSummaryConstructor {
 
         // interfaces info
         final var parentInterfaces = source.getGenericInterfaces();
-        if (parentInterfaces.length != 0) {
-            final var filteredAnn = genericsFilter(Annotations.mkImplements(parentInterfaces));
+        for (var i : parentInterfaces) {
+            final var filteredAnn = genericsFilter(Annotations.mkImplements(i));
             summary.annotations.add(filteredAnn);
         }
 

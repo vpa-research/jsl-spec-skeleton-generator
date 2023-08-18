@@ -66,11 +66,19 @@ final class Annotations {
     }
 
     public static String mkGeneric(final String generics) {
-        return GENERIC_PREFIX + "(\"" + generics + "\")";
+        return GENERIC_PREFIX + "([\"" + generics + "\"])";
     }
 
-    public static String mkGenericResult(final String genericParameters) {
-        return GENERIC_RESULT_PREFIX + "(\"" + genericParameters + "\")";
+    public static String mkGeneric(final Collection<String> generics) {
+        return GENERIC_PREFIX + "([\"" + String.join("\", \"", generics) + "\"])";
+    }
+
+    public static String mkGenericResult(final String generics) {
+        return GENERIC_RESULT_PREFIX + "([\"" + generics + "\"])";
+    }
+
+    public static String mkGenericResult(final Collection<String> generics) {
+        return GENERIC_RESULT_PREFIX + "([\"" + String.join("\", \"", generics) + "\"])";
     }
 
     public static String mkThrows(final Type[] exceptions) {
@@ -85,12 +93,7 @@ final class Annotations {
         return EXTENDS_PREFIX + "(\"" + parent.getTypeName() + "\")";
     }
 
-    public static String mkImplements(final Type[] parentInterfaces) {
-        final var sj = new StringJoiner("\", \"", "([\"", "\"])");
-
-        for (final var i : parentInterfaces)
-            sj.add(i.getTypeName());
-
-        return IMPLEMENTS_PREFIX + sj;
+    public static String mkImplements(final Type parentInterface) {
+        return IMPLEMENTS_PREFIX + "(\"" + parentInterface.getTypeName() + "\")";
     }
 }

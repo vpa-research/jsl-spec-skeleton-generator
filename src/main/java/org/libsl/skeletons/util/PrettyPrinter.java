@@ -89,6 +89,10 @@ public class PrettyPrinter {
         return this;
     }
 
+    public PrettyPrinter add(final String fmt, final Object... values) {
+        return add(String.format(fmt, values));
+    }
+
     public void addln() {
         stream.println();
 
@@ -102,5 +106,9 @@ public class PrettyPrinter {
         renderStrings(lines, lines.length);
 
         startedPrinting = false;
+    }
+
+    public void addln(final String fmt, final Object... values) {
+        addln(String.format(fmt, values));
     }
 }
