@@ -20,9 +20,11 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("E")
+@Parameterized(["E"])
 @extends("java.util.AbstractSet<E>")
-@implements(["java.util.Set<E>", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.Set<E>")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public automaton HashSet: int
 (
     @static @final var serialVersionUID: long = -5024744406713321676;
@@ -41,7 +43,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor HashSet (@Parameterized("? extends E") arg0: Collection)
+    constructor HashSet (@Parameterized(["? extends E"]) arg0: Collection)
     {
         action TODO();
     }
@@ -101,7 +103,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun iterator (): Iterator
     {
         action TODO();
@@ -120,7 +122,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun spliterator (): Spliterator
     {
         action TODO();

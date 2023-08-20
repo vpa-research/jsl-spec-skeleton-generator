@@ -3,15 +3,14 @@ package org.libsl.skeletons;
 import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.function.Predicate;
 
 final class TypeVariableCollector {
     private final Class<?> source;
-    private final Map<String, Type[]> outTypeParameters;
+    private final Collection<String> outTypeParameters;
     private final Collection<Type> visitedTypes = new HashSet<>();
 
-    public TypeVariableCollector(final Class<?> sourceClass, final Map<String, Type[]> outTypeParameters) {
+    public TypeVariableCollector(final Class<?> sourceClass, final Collection<String> outTypeParameters) {
         this.source = sourceClass;
         this.outTypeParameters = outTypeParameters;
     }
@@ -23,7 +22,7 @@ final class TypeVariableCollector {
 
         if (type instanceof TypeVariable) {
             final var variable = (TypeVariable<?>) type;
-            outTypeParameters.put(variable.getName(), variable.getBounds());
+            outTypeParameters.add(variable.getName());
 
             collectTypeParameters(variable.getBounds());
         } else if (type instanceof ParameterizedType) {

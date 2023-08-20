@@ -18,9 +18,11 @@ import "list-actions.lsl";
 @TypeMapping(typeVariable=true) typealias E = Object;
 
 @For(automaton="HashSetAutomaton", insteadOf="java.util.HashSet")
-@Parameterized("E")
+@Parameterized(["E"])
 @extends("java.util.AbstractSet<E>")
-@implements(["java.util.Set<E>", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.Set<E>")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public type HashSet
 {
     @static @final var serialVersionUID: long = -5024744406713321676;
@@ -29,7 +31,7 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("E")
+@Parameterized(["E"])
 @public automaton HashSetAutomaton: HashSet
 (
 )
@@ -47,7 +49,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, @Parameterized("? extends E") arg0: Collection)
+    constructor `HashSet#HashSet` (@target obj: HashSet, @Parameterized(["? extends E"]) arg0: Collection)
     {
         action TODO();
     }
@@ -107,7 +109,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `HashSet#iterator` (@target obj: HashSet): Iterator
     {
         action TODO();
@@ -126,7 +128,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `HashSet#spliterator` (@target obj: HashSet): Spliterator
     {
         action TODO();

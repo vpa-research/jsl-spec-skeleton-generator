@@ -142,8 +142,8 @@ final class InfoRendererDirect extends AbstractInfoRenderer {
         out.addln("// local semantic types");
 
         out.addln();
-        for (var p : summary.allGenericTypeVariables.entrySet())
-            out.addln("@TypeMapping(typeVariable=true) typealias " + p.getKey() + " = Object;");
+        for (var p : summary.allGenericTypeVariables)
+            out.addln("@TypeMapping(typeVariable=true) typealias %s = Object;", p);
         out.addln();
     }
 

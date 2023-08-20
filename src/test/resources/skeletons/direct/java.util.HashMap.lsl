@@ -22,9 +22,11 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("K, V")
+@Parameterized(["K", "V"])
 @extends("java.util.AbstractMap<K, V>")
-@implements(["java.util.Map<K, V>", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.Map<K, V>")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public automaton HashMap: int
 (
     @private @static @final var serialVersionUID: long = 362498820763181265;
@@ -43,7 +45,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor HashMap (@Parameterized("? extends K, ? extends V") arg0: Map)
+    constructor HashMap (@Parameterized(["? extends K", "? extends V"]) arg0: Map)
     {
         action TODO();
     }
@@ -79,19 +81,19 @@ import "list-actions.lsl";
     }
 
 
-    fun compute (arg0: K, @Parameterized("? super K, ? super V, ? extends V") arg1: BiFunction): V
+    fun compute (arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun computeIfAbsent (arg0: K, @Parameterized("? super K, ? extends V") arg1: Function): V
+    fun computeIfAbsent (arg0: K, @Parameterized(["? super K", "? extends V"]) arg1: Function): V
     {
         action TODO();
     }
 
 
-    fun computeIfPresent (arg0: K, @Parameterized("? super K, ? super V, ? extends V") arg1: BiFunction): V
+    fun computeIfPresent (arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
     {
         action TODO();
     }
@@ -109,14 +111,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("java.util.Map$Entry<K, V>")
+    @ParameterizedResult(["java.util.Map$Entry<K, V>"])
     fun entrySet (): Set
     {
         action TODO();
     }
 
 
-    fun forEach (@Parameterized("? super K, ? super V") arg0: BiConsumer): void
+    fun forEach (@Parameterized(["? super K", "? super V"]) arg0: BiConsumer): void
     {
         action TODO();
     }
@@ -140,14 +142,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("K")
+    @ParameterizedResult(["K"])
     fun keySet (): Set
     {
         action TODO();
     }
 
 
-    fun merge (arg0: K, arg1: V, @Parameterized("? super V, ? super V, ? extends V") arg2: BiFunction): V
+    fun merge (arg0: K, arg1: V, @Parameterized(["? super V", "? super V", "? extends V"]) arg2: BiFunction): V
     {
         action TODO();
     }
@@ -159,7 +161,7 @@ import "list-actions.lsl";
     }
 
 
-    fun putAll (@Parameterized("? extends K, ? extends V") arg0: Map): void
+    fun putAll (@Parameterized(["? extends K", "? extends V"]) arg0: Map): void
     {
         action TODO();
     }
@@ -195,7 +197,7 @@ import "list-actions.lsl";
     }
 
 
-    fun replaceAll (@Parameterized("? super K, ? super V, ? extends V") arg0: BiFunction): void
+    fun replaceAll (@Parameterized(["? super K", "? super V", "? extends V"]) arg0: BiFunction): void
     {
         action TODO();
     }
@@ -207,7 +209,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("V")
+    @ParameterizedResult(["V"])
     fun values (): Collection
     {
         action TODO();

@@ -22,7 +22,7 @@ import "list-actions.lsl";
 @TypeMapping(typeVariable=true) typealias X = Object;
 
 @For(automaton="OptionalAutomaton", insteadOf="java.util.Optional")
-@Parameterized("T")
+@Parameterized(["T"])
 @public @final type Optional
 {
 }
@@ -30,7 +30,7 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("T")
+@Parameterized(["T"])
 @public automaton OptionalAutomaton: Optional
 (
 )
@@ -58,24 +58,24 @@ import "list-actions.lsl";
 
     // static methods
 
-    @Parameterized("T")
-    @ParameterizedResult("T")
+    @Parameterized(["T"])
+    @ParameterizedResult(["T"])
     @static fun `Optional#empty` (): Optional
     {
         action TODO();
     }
 
 
-    @Parameterized("T")
-    @ParameterizedResult("T")
+    @Parameterized(["T"])
+    @ParameterizedResult(["T"])
     @static fun `Optional#of` (arg0: T): Optional
     {
         action TODO();
     }
 
 
-    @Parameterized("T")
-    @ParameterizedResult("T")
+    @Parameterized(["T"])
+    @ParameterizedResult(["T"])
     @static fun `Optional#ofNullable` (arg0: T): Optional
     {
         action TODO();
@@ -90,16 +90,16 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("T")
-    fun `Optional#filter` (@target obj: Optional, @Parameterized("? super T") arg0: Predicate): Optional
+    @ParameterizedResult(["T"])
+    fun `Optional#filter` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Predicate): Optional
     {
         action TODO();
     }
 
 
-    @Parameterized("U")
-    @ParameterizedResult("U")
-    fun `Optional#flatMap` (@target obj: Optional, @Parameterized("? super T, ? extends Optional<? extends U>") arg0: Function): Optional
+    @Parameterized(["U"])
+    @ParameterizedResult(["U"])
+    fun `Optional#flatMap` (@target obj: Optional, @Parameterized(["? super T", "? extends Optional<? extends U>"]) arg0: Function): Optional
     {
         action TODO();
     }
@@ -117,13 +117,13 @@ import "list-actions.lsl";
     }
 
 
-    fun `Optional#ifPresent` (@target obj: Optional, @Parameterized("? super T") arg0: Consumer): void
+    fun `Optional#ifPresent` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Consumer): void
     {
         action TODO();
     }
 
 
-    fun `Optional#ifPresentOrElse` (@target obj: Optional, @Parameterized("? super T") arg0: Consumer, arg1: Runnable): void
+    fun `Optional#ifPresentOrElse` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Consumer, arg1: Runnable): void
     {
         action TODO();
     }
@@ -141,16 +141,16 @@ import "list-actions.lsl";
     }
 
 
-    @Parameterized("U")
-    @ParameterizedResult("U")
-    fun `Optional#map` (@target obj: Optional, @Parameterized("? super T, ? extends U") arg0: Function): Optional
+    @Parameterized(["U"])
+    @ParameterizedResult(["U"])
+    fun `Optional#map` (@target obj: Optional, @Parameterized(["? super T", "? extends U"]) arg0: Function): Optional
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("T")
-    fun `Optional#or` (@target obj: Optional, @Parameterized("? extends Optional<? extends T>") arg0: Supplier): Optional
+    @ParameterizedResult(["T"])
+    fun `Optional#or` (@target obj: Optional, @Parameterized(["? extends Optional<? extends T>"]) arg0: Supplier): Optional
     {
         action TODO();
     }
@@ -162,7 +162,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `Optional#orElseGet` (@target obj: Optional, @Parameterized("? extends T") arg0: Supplier): T
+    fun `Optional#orElseGet` (@target obj: Optional, @Parameterized(["? extends T"]) arg0: Supplier): T
     {
         action TODO();
     }
@@ -174,15 +174,15 @@ import "list-actions.lsl";
     }
 
 
-    @Parameterized("X extends java.lang.Throwable")
+    @Parameterized(["X extends java.lang.Throwable"])
     @throws(["X"])
-    fun `Optional#orElseThrow` (@target obj: Optional, @Parameterized("? extends X") arg0: Supplier): T
+    fun `Optional#orElseThrow` (@target obj: Optional, @Parameterized(["? extends X"]) arg0: Supplier): T
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("T")
+    @ParameterizedResult(["T"])
     fun `Optional#stream` (@target obj: Optional): Stream
     {
         action TODO();

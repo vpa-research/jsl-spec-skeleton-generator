@@ -1,6 +1,5 @@
 package org.libsl.skeletons;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 final class ClassSummary {
@@ -14,19 +13,23 @@ final class ClassSummary {
     public final Map<String, VariableSummary> specialConstants = new TreeMap<>();
 
     private final Map<String, Integer> overloadCounter = new HashMap<>();
-    public final Map<String, Type[]> allGenericTypeVariables = new LinkedHashMap<>();
+    public final Collection<String> allGenericTypeVariables = new TreeSet<>();
 
     public ClassSummary(final String name, final String typeName) {
         this.simpleName = name;
         this.typeName = typeName;
     }
 
-    private void countMethodOverload(final String functionName) {
-        overloadCounter.compute(functionName, (kk, count) -> count != null ? count + 1 : 0);
+    private void countMethodOverload(final String methodName) {
+        overloadCounter.compute(methodName, (m, count) -> count != null ? count + 1 : 1);
     }
 
-    public int getOverloadCounter(final String functionName) {
-        return overloadCounter.getOrDefault(functionName, 0);
+    public int getOverloadCounter(final String methodName) {
+        return overloadCounter.getOrDefault(methodName, 0);
+    }
+
+    public boolean hasOverloads(final String methodName) {
+        return getOverloadCounter(methodName) > 1;
     }
 
     public MethodSummary addConstructor(final String signature) {

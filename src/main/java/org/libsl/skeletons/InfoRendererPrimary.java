@@ -4,11 +4,10 @@ import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import static org.libsl.skeletons.Annotations.*;
-import static org.libsl.skeletons.util.PrettyPrinter.TAB;
 
 final class InfoRendererPrimary extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "*.";
@@ -213,17 +212,8 @@ final class InfoRendererPrimary extends AbstractInfoRenderer {
             out.addln("shift %s -> %s by [", "Allocated", "Initialized");
             out.beginBlock();
 
-            if (!summary.constructors.isEmpty())
-                renderShiftCollection(
-                        "constructors",
-                        summary.constructors.values(),
-                        this::fixInstanceSignature);
-
-            if (!summary.staticMethods.isEmpty())
-                renderShiftCollection(
-                        "static operations",
-                        summary.staticMethods.values(),
-                        UnaryOperator.identity());
+            renderShiftCollection("constructors", summary.constructors.values());
+            renderShiftCollection("static operations", summary.staticMethods.values());
 
             out.endBlock();
             out.addln("];");
@@ -233,73 +223,35 @@ final class InfoRendererPrimary extends AbstractInfoRenderer {
         out.addln("shift %s -> %s by [", "Initialized", "self");
         out.beginBlock();
 
-        renderShiftCollection(
-                "instance methods",
-                summary.instanceMethods.values(),
-                this::fixInstanceSignature);
+        renderShiftCollection("instance methods", summary.instanceMethods.values());
 
         out.endBlock();
         out.addln("];");
     }
 
-    private String fixInstanceSignature(final String signature) {
-        // check for brackets first
-        final var bracketIndex = signature.indexOf('(');
-        if (bracketIndex > 0) {
-            final var spaceIndex = signature.indexOf(' ');
-            final var methodNameLength = spaceIndex > 0
-                    ? spaceIndex
-                    : bracketIndex;
+    private void renderShiftCollection(final String section,
+                                       final Collection<MethodSummary> methods) {
+        if (methods.isEmpty())
+            return;
 
-            final var methodName = signature.substring(0, methodNameLength);
+        out.add("// ").addln(section);
 
-            // remove brackets if there are no other methods with the same name
-            if (!hasOverloads(methodName))
-                return methodName;
+        for (var m : methods) {
+            final String suffix;
 
-            return methodName
-                    + " (" + summary.simpleName + ", "
-                    + signature.substring(bracketIndex + 1);
-        }
+            if (summary.hasOverloads(m.simpleName)) {
+                // render parameters
+                final var sj = new StringJoiner(", ", " (", ")");
+                for (var parameter : m.parameters.values())
+                    sj.add(parameter.simpleType);
 
-        // no brackets - looking for overloads
-        final var hasOverloads = hasOverloads(signature);
-
-        // add instance reference if there are overloads
-        return hasOverloads
-                ? signature + " (" + summary.simpleName + ")"
-                : signature;
-    }
-
-    private boolean hasOverloads(final String methodName) {
-        var counter = 0;
-
-        for (var m : summary.constructors.values())
-            if (m.simpleName.equals(methodName)) {
-                counter += 1;
-
-                if (counter > 1)
-                    return true;
+                suffix = sj.toString();
+            } else {
+                suffix = "";
             }
 
-        if (counter == 0)
-            for (var m : summary.instanceMethods.values())
-                if (m.simpleName.equals(methodName)) {
-                    counter += 1;
-
-                    if (counter > 1)
-                        return true;
-                }
-
-        return false;
-    }
-
-    private void renderShiftCollection(final String section,
-                                       final Collection<MethodSummary> methods,
-                                       final UnaryOperator<String> sigModifier) {
-        out.add("// ").addln(section);
-        for (var m : methods)
-            out.addln("%s,", sigModifier.apply(m.signature));
+            out.addln("%s%s,", m.simpleName, suffix);
+        }
     }
 
     public void render() {

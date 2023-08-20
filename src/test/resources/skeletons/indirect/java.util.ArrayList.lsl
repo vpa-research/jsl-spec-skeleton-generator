@@ -20,9 +20,12 @@ import "list-actions.lsl";
 @TypeMapping(typeVariable=true) typealias E = Object;
 
 @For(automaton="ArrayListAutomaton", insteadOf="java.util.ArrayList")
-@Parameterized("E")
+@Parameterized(["E"])
 @extends("java.util.AbstractList<E>")
-@implements(["java.util.List<E>", "java.util.RandomAccess", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.List<E>")
+@implements("java.util.RandomAccess")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public type ArrayList
 {
     @private @static @final var serialVersionUID: long = 8683452581122892189;
@@ -31,7 +34,7 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("E")
+@Parameterized(["E"])
 @public automaton ArrayListAutomaton: ArrayList
 (
 )
@@ -49,7 +52,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor `ArrayList#ArrayList` (@target obj: ArrayList, @Parameterized("? extends E") arg0: Collection)
+    constructor `ArrayList#ArrayList` (@target obj: ArrayList, @Parameterized(["? extends E"]) arg0: Collection)
     {
         action TODO();
     }
@@ -79,13 +82,13 @@ import "list-actions.lsl";
     }
 
 
-    fun `ArrayList#addAll` (@target obj: ArrayList, @Parameterized("? extends E") arg0: Collection): boolean
+    fun `ArrayList#addAll` (@target obj: ArrayList, @Parameterized(["? extends E"]) arg0: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun `ArrayList#addAll` (@target obj: ArrayList, arg0: int, @Parameterized("? extends E") arg1: Collection): boolean
+    fun `ArrayList#addAll` (@target obj: ArrayList, arg0: int, @Parameterized(["? extends E"]) arg1: Collection): boolean
     {
         action TODO();
     }
@@ -121,7 +124,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `ArrayList#forEach` (@target obj: ArrayList, @Parameterized("? super E") arg0: Consumer): void
+    fun `ArrayList#forEach` (@target obj: ArrayList, @Parameterized(["? super E"]) arg0: Consumer): void
     {
         action TODO();
     }
@@ -151,7 +154,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `ArrayList#iterator` (@target obj: ArrayList): Iterator
     {
         action TODO();
@@ -164,14 +167,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `ArrayList#listIterator` (@target obj: ArrayList): ListIterator
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `ArrayList#listIterator` (@target obj: ArrayList, arg0: int): ListIterator
     {
         action TODO();
@@ -190,25 +193,25 @@ import "list-actions.lsl";
     }
 
 
-    fun `ArrayList#removeAll` (@target obj: ArrayList, @Parameterized("?") arg0: Collection): boolean
+    fun `ArrayList#removeAll` (@target obj: ArrayList, @Parameterized(["?"]) arg0: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun `ArrayList#removeIf` (@target obj: ArrayList, @Parameterized("? super E") arg0: Predicate): boolean
+    fun `ArrayList#removeIf` (@target obj: ArrayList, @Parameterized(["? super E"]) arg0: Predicate): boolean
     {
         action TODO();
     }
 
 
-    fun `ArrayList#replaceAll` (@target obj: ArrayList, @Parameterized("E") arg0: UnaryOperator): void
+    fun `ArrayList#replaceAll` (@target obj: ArrayList, @Parameterized(["E"]) arg0: UnaryOperator): void
     {
         action TODO();
     }
 
 
-    fun `ArrayList#retainAll` (@target obj: ArrayList, @Parameterized("?") arg0: Collection): boolean
+    fun `ArrayList#retainAll` (@target obj: ArrayList, @Parameterized(["?"]) arg0: Collection): boolean
     {
         action TODO();
     }
@@ -226,20 +229,20 @@ import "list-actions.lsl";
     }
 
 
-    fun `ArrayList#sort` (@target obj: ArrayList, @Parameterized("? super E") arg0: Comparator): void
+    fun `ArrayList#sort` (@target obj: ArrayList, @Parameterized(["? super E"]) arg0: Comparator): void
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `ArrayList#spliterator` (@target obj: ArrayList): Spliterator
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun `ArrayList#subList` (@target obj: ArrayList, arg0: int, arg1: int): List
     {
         action TODO();
@@ -252,7 +255,7 @@ import "list-actions.lsl";
     }
 
 
-    @Parameterized("T")
+    @Parameterized(["T"])
     fun `ArrayList#toArray` (@target obj: ArrayList, arg0: array<T>): array<T>
     {
         action TODO();

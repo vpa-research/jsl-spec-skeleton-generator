@@ -154,8 +154,9 @@ final class JslClassSummaryConstructor {
         }
     }
 
-    private static String declarationParamsToString(final TypeVariable<?>[] params) {
-        final var sj = new StringJoiner(", ");
+    private static Collection<String> declarationParamsToString(final TypeVariable<?>[] params) {
+        final var result = new ArrayList<String>();
+
         for (var tv : params) {
             final var name = tv.getName();
 
@@ -169,10 +170,10 @@ final class JslClassSummaryConstructor {
                 }
 
             final var suffix = actualBounds == 0 ? "" : ssj.toString();
-            sj.add(name + suffix);
+            result.add(name + suffix);
         }
 
-        return sj.toString();
+        return Collections.unmodifiableCollection(result);
     }
 
     private void collectTypeVariables() {
@@ -192,7 +193,7 @@ final class JslClassSummaryConstructor {
         // incoming generic parameters
         final var declarationParameters = source.getTypeParameters();
         if (declarationParameters.length != 0) {
-            final String filteredStr = genericsFilter(declarationParamsToString(declarationParameters));
+            final var filteredStr = genericsFilter(declarationParamsToString(declarationParameters));
             summary.annotations.add(Annotations.mkGeneric(filteredStr));
         }
 

@@ -20,9 +20,11 @@ import "list-actions.lsl";
 @TypeMapping(typeVariable=true) typealias V = Object;
 
 @For(automaton="HashMapAutomaton", insteadOf="java.util.HashMap")
-@Parameterized("K, V")
+@Parameterized(["K", "V"])
 @extends("java.util.AbstractMap<K, V>")
-@implements(["java.util.Map<K, V>", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.Map<K, V>")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public type HashMap
 {
     @private @static @final var serialVersionUID: long = 362498820763181265;
@@ -31,7 +33,7 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("K, V")
+@Parameterized(["K", "V"])
 @public automaton HashMapAutomaton: HashMap
 (
 )
@@ -49,7 +51,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, @Parameterized("? extends K, ? extends V") arg0: Map)
+    constructor `HashMap#HashMap` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) arg0: Map)
     {
         action TODO();
     }
@@ -85,19 +87,19 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#compute` (@target obj: HashMap, arg0: K, @Parameterized("? super K, ? super V, ? extends V") arg1: BiFunction): V
+    fun `HashMap#compute` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#computeIfAbsent` (@target obj: HashMap, arg0: K, @Parameterized("? super K, ? extends V") arg1: Function): V
+    fun `HashMap#computeIfAbsent` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? extends V"]) arg1: Function): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#computeIfPresent` (@target obj: HashMap, arg0: K, @Parameterized("? super K, ? super V, ? extends V") arg1: BiFunction): V
+    fun `HashMap#computeIfPresent` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
     {
         action TODO();
     }
@@ -115,14 +117,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("java.util.Map$Entry<K, V>")
+    @ParameterizedResult(["java.util.Map$Entry<K, V>"])
     fun `HashMap#entrySet` (@target obj: HashMap): Set
     {
         action TODO();
     }
 
 
-    fun `HashMap#forEach` (@target obj: HashMap, @Parameterized("? super K, ? super V") arg0: BiConsumer): void
+    fun `HashMap#forEach` (@target obj: HashMap, @Parameterized(["? super K", "? super V"]) arg0: BiConsumer): void
     {
         action TODO();
     }
@@ -146,14 +148,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("K")
+    @ParameterizedResult(["K"])
     fun `HashMap#keySet` (@target obj: HashMap): Set
     {
         action TODO();
     }
 
 
-    fun `HashMap#merge` (@target obj: HashMap, arg0: K, arg1: V, @Parameterized("? super V, ? super V, ? extends V") arg2: BiFunction): V
+    fun `HashMap#merge` (@target obj: HashMap, arg0: K, arg1: V, @Parameterized(["? super V", "? super V", "? extends V"]) arg2: BiFunction): V
     {
         action TODO();
     }
@@ -165,7 +167,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#putAll` (@target obj: HashMap, @Parameterized("? extends K, ? extends V") arg0: Map): void
+    fun `HashMap#putAll` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) arg0: Map): void
     {
         action TODO();
     }
@@ -201,7 +203,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#replaceAll` (@target obj: HashMap, @Parameterized("? super K, ? super V, ? extends V") arg0: BiFunction): void
+    fun `HashMap#replaceAll` (@target obj: HashMap, @Parameterized(["? super K", "? super V", "? extends V"]) arg0: BiFunction): void
     {
         action TODO();
     }
@@ -213,7 +215,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("V")
+    @ParameterizedResult(["V"])
     fun `HashMap#values` (@target obj: HashMap): Collection
     {
         action TODO();

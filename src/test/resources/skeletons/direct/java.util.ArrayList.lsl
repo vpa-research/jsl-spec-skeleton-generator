@@ -22,9 +22,12 @@ import "list-actions.lsl";
 
 // automata
 
-@Parameterized("E")
+@Parameterized(["E"])
 @extends("java.util.AbstractList<E>")
-@implements(["java.util.List<E>", "java.util.RandomAccess", "java.lang.Cloneable", "java.io.Serializable"])
+@implements("java.util.List<E>")
+@implements("java.util.RandomAccess")
+@implements("java.lang.Cloneable")
+@implements("java.io.Serializable")
 @public automaton ArrayList: int
 (
     @private @static @final var serialVersionUID: long = 8683452581122892189;
@@ -43,7 +46,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor ArrayList (@Parameterized("? extends E") arg0: Collection)
+    constructor ArrayList (@Parameterized(["? extends E"]) arg0: Collection)
     {
         action TODO();
     }
@@ -73,13 +76,13 @@ import "list-actions.lsl";
     }
 
 
-    fun addAll (@Parameterized("? extends E") arg0: Collection): boolean
+    fun addAll (@Parameterized(["? extends E"]) arg0: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun addAll (arg0: int, @Parameterized("? extends E") arg1: Collection): boolean
+    fun addAll (arg0: int, @Parameterized(["? extends E"]) arg1: Collection): boolean
     {
         action TODO();
     }
@@ -115,7 +118,7 @@ import "list-actions.lsl";
     }
 
 
-    fun forEach (@Parameterized("? super E") arg0: Consumer): void
+    fun forEach (@Parameterized(["? super E"]) arg0: Consumer): void
     {
         action TODO();
     }
@@ -145,7 +148,7 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun iterator (): Iterator
     {
         action TODO();
@@ -158,14 +161,14 @@ import "list-actions.lsl";
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun listIterator (): ListIterator
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun listIterator (arg0: int): ListIterator
     {
         action TODO();
@@ -184,25 +187,25 @@ import "list-actions.lsl";
     }
 
 
-    fun removeAll (@Parameterized("?") arg0: Collection): boolean
+    fun removeAll (@Parameterized(["?"]) arg0: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun removeIf (@Parameterized("? super E") arg0: Predicate): boolean
+    fun removeIf (@Parameterized(["? super E"]) arg0: Predicate): boolean
     {
         action TODO();
     }
 
 
-    fun replaceAll (@Parameterized("E") arg0: UnaryOperator): void
+    fun replaceAll (@Parameterized(["E"]) arg0: UnaryOperator): void
     {
         action TODO();
     }
 
 
-    fun retainAll (@Parameterized("?") arg0: Collection): boolean
+    fun retainAll (@Parameterized(["?"]) arg0: Collection): boolean
     {
         action TODO();
     }
@@ -220,20 +223,20 @@ import "list-actions.lsl";
     }
 
 
-    fun sort (@Parameterized("? super E") arg0: Comparator): void
+    fun sort (@Parameterized(["? super E"]) arg0: Comparator): void
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun spliterator (): Spliterator
     {
         action TODO();
     }
 
 
-    @ParameterizedResult("E")
+    @ParameterizedResult(["E"])
     fun subList (arg0: int, arg1: int): List
     {
         action TODO();
@@ -246,7 +249,7 @@ import "list-actions.lsl";
     }
 
 
-    @Parameterized("T")
+    @Parameterized(["T"])
     fun toArray (arg0: array<T>): array<T>
     {
         action TODO();
