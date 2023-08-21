@@ -1,6 +1,6 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
-import org.libsl.skeletons.util.JslClassCache;
+import org.libsl.skeletons.sources.runtime.JslClassCache;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;

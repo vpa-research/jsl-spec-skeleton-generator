@@ -1,10 +1,10 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.*;
 
-final class Annotations {
+public final class Annotations {
     private Annotations() {
     }
 

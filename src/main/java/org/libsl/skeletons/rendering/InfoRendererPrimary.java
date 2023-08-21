@@ -1,5 +1,8 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.rendering;
 
+import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.MethodSummary;
+import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.Collection;
@@ -7,9 +10,9 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
-import static org.libsl.skeletons.Annotations.*;
+import static org.libsl.skeletons.summary.Annotations.*;
 
-final class InfoRendererPrimary extends AbstractInfoRenderer {
+public final class InfoRendererPrimary extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "*.";
     private static final String ORIGIN_URL_PREFIX = "https://github.com/openjdk/jdk11/blob/master/src/java.base/share/classes";
 

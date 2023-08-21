@@ -1,8 +1,8 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
 import java.util.*;
 
-final class MethodSummary {
+public final class MethodSummary {
     private final String BODY_DEFAULT = "action TODO();";
 
     public final String simpleName;

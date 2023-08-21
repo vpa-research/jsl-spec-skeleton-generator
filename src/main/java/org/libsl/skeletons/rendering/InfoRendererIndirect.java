@@ -1,15 +1,18 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.rendering;
 
+import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.MethodSummary;
+import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.libsl.skeletons.Annotations.*;
+import static org.libsl.skeletons.summary.Annotations.*;
 import static org.libsl.skeletons.util.PrettyPrinter.TAB;
 
-final class InfoRendererIndirect extends AbstractInfoRenderer {
+public final class InfoRendererIndirect extends AbstractInfoRenderer {
     private static final String COMPOUND_NAME_SEPARATOR = "#";
     private final ClassSummary summary;
     private final String automatonName;

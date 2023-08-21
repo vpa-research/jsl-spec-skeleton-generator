@@ -1,4 +1,4 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.rendering;
 
 import org.libsl.skeletons.util.PrettyPrinter;
 

@@ -1,5 +1,6 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
+import org.libsl.skeletons.*;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.*;
@@ -7,7 +8,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-final class JslClassSummaryConstructor {
+public final class JslClassSummaryConstructor {
     private final Class<?> source;
     private final ClassSummary summary;
 

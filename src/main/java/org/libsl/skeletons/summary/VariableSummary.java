@@ -1,8 +1,8 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
 import java.util.*;
 
-final class VariableSummary {
+public final class VariableSummary {
     public final String name;
     public final String simpleType;
     public final Set<String> annotations = new LinkedHashSet<>();

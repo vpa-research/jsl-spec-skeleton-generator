@@ -3,7 +3,10 @@ package org.libsl.skeletons;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.libsl.skeletons.util.JslClassCache;
+import org.libsl.skeletons.rendering.InfoRendererIndirect;
+import org.libsl.skeletons.sources.runtime.JslClassCache;
+import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.JslClassSummaryConstructor;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.io.ByteArrayOutputStream;

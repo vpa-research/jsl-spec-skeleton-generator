@@ -1,8 +1,8 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
 import java.util.*;
 
-final class ClassSummary {
+public final class ClassSummary {
     public final String simpleName;
     public final String typeName;
     public final Set<String> imports = new TreeSet<>();
@@ -11,9 +11,9 @@ final class ClassSummary {
     public final Map<String, MethodSummary> staticMethods = new TreeMap<>();
     public final Map<String, MethodSummary> instanceMethods = new TreeMap<>();
     public final Map<String, VariableSummary> specialConstants = new TreeMap<>();
+    public final Collection<String> allGenericTypeVariables = new TreeSet<>();
 
     private final Map<String, Integer> overloadCounter = new HashMap<>();
-    public final Collection<String> allGenericTypeVariables = new TreeSet<>();
 
     public ClassSummary(final String name, final String typeName) {
         this.simpleName = name;

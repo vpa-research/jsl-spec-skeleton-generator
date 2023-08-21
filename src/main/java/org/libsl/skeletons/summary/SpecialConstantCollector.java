@@ -1,4 +1,4 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.summary;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

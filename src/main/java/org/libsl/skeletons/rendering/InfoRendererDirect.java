@@ -1,15 +1,18 @@
-package org.libsl.skeletons;
+package org.libsl.skeletons.rendering;
 
+import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.MethodSummary;
+import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.libsl.skeletons.Annotations.*;
+import static org.libsl.skeletons.summary.Annotations.*;
 import static org.libsl.skeletons.util.PrettyPrinter.TAB;
 
-final class InfoRendererDirect extends AbstractInfoRenderer {
+public final class InfoRendererDirect extends AbstractInfoRenderer {
     private final ClassSummary summary;
 
     public InfoRendererDirect(final ClassSummary summary, final PrettyPrinter out) {
