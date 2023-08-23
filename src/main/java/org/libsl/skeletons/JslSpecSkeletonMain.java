@@ -6,7 +6,7 @@ import org.libsl.skeletons.rendering.InfoRendererIndirect;
 import org.libsl.skeletons.rendering.InfoRendererPrimary;
 import org.libsl.skeletons.sources.runtime.JslClassCache;
 import org.libsl.skeletons.summary.ClassSummary;
-import org.libsl.skeletons.summary.JslClassSummaryConstructor;
+import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzer;
 import org.libsl.skeletons.util.PrettyPrinter;
 import org.objectweb.asm.ClassReader;
 
@@ -45,7 +45,10 @@ public final class JslSpecSkeletonMain {
     private String getTargetClass() {
         final var target = props.getProperty("class");
         if (target == null) {
-            System.err.println("[!] Class have not been specified. Use 'class=<canonical-name>' to specify the class for analysis");
+            System.err.println(
+                    "[!] Class have not been specified. " +
+                    "Use 'class=<canonical-name>' to specify the class for analysis " +
+                    "(Note: use '$' separator for sub-classes)");
             System.exit(-1);
         }
 
@@ -60,7 +63,7 @@ public final class JslSpecSkeletonMain {
         final var source = props.getProperty("data-source", "reflection");
         switch (source) {
             case "reflection":
-                supplier = new JslClassSummaryConstructor(loadClassFromRuntime(targetClass))::collectInfo;
+                supplier = new ReflectionClassAnalyzer(loadClassFromRuntime(targetClass))::collectInfo;
                 break;
 
             case "bytecode":

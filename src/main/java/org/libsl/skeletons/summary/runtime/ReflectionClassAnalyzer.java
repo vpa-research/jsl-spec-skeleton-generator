@@ -1,6 +1,9 @@
-package org.libsl.skeletons.summary;
+package org.libsl.skeletons.summary.runtime;
 
-import org.libsl.skeletons.*;
+import org.libsl.skeletons.summary.Annotations;
+import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.ClassSummaryProducer;
+import org.libsl.skeletons.summary.MethodSummary;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.*;
@@ -8,11 +11,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class JslClassSummaryConstructor {
+public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     private final Class<?> source;
     private final ClassSummary summary;
 
-    public JslClassSummaryConstructor(final Class<?> source) {
+    public ReflectionClassAnalyzer(final Class<?> source) {
         this.source = source;
         this.summary = new ClassSummary(source.getSimpleName(), source.getTypeName());
 
@@ -86,6 +89,9 @@ public final class JslClassSummaryConstructor {
             final var signature = MethodSummary.getSignature(methodName, c.getParameterTypes());
             final var methodSummary = summary.addConstructor(signature);
 
+            // set the origin
+            methodSummary.originClassName = c.getDeclaringClass().getCanonicalName();
+
             // generics in declaration
             final var declarationParameters = c.getTypeParameters();
             if (declarationParameters.length != 0) {
@@ -110,7 +116,7 @@ public final class JslClassSummaryConstructor {
 
     private void collectMethodsInfo() {
         // public methods (including static ones)
-        for (var m : source.getDeclaredMethods()) {
+        for (var m : source.getMethods()) {
             final var mods = m.getModifiers();
             if (!ElementClassifier.isSuitablePublicMethod(m))
                 continue;
@@ -126,6 +132,9 @@ public final class JslClassSummaryConstructor {
                 methodSummary = summary.addStaticMethod(methodName, signature, retTypeSummary.simpleType);
             else
                 methodSummary = summary.addInstanceMethod(methodName, signature, retTypeSummary.simpleType);
+
+            // set the origin info
+            methodSummary.originClassName = m.getDeclaringClass().getCanonicalName();
 
             // generics in declaration
             final var declarationParameters = m.getTypeParameters();
@@ -190,6 +199,7 @@ public final class JslClassSummaryConstructor {
                 .findConstants(ElementClassifier::isSuitablePublicField);
     }
 
+    @Override
     public ClassSummary collectInfo() {
         // incoming generic parameters
         final var declarationParameters = source.getTypeParameters();
@@ -226,5 +236,4 @@ public final class JslClassSummaryConstructor {
 
         return summary;
     }
-
 }

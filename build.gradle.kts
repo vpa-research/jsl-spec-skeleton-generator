@@ -1,8 +1,8 @@
 plugins {
-    id("java")
+    application
 }
 
-group = "org.example"
+group = "org.libsl.skeletons"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -14,6 +14,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation("org.ow2.asm:asm:9.5")
+}
+
+application {
+    // the main class (entry point) for the application
+    mainClass.set("org.libsl.skeletons.JslSpecSkeletonMain")
 }
 
 tasks.test {

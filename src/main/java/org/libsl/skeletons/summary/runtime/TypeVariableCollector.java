@@ -1,4 +1,4 @@
-package org.libsl.skeletons.summary;
+package org.libsl.skeletons.summary.runtime;
 
 import java.lang.reflect.*;
 import java.util.Collection;

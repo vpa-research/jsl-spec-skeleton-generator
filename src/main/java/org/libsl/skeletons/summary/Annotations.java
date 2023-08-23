@@ -43,6 +43,11 @@ public final class Annotations {
             list.add(PRIVATE);
         else if (Modifier.isProtected(mods))
             list.add(PROTECTED);
+        // functions are public-by-default
+
+        // make private-default for package-private methods
+        if (!Modifier.isPrivate(mods) && !Modifier.isProtected(mods) && !Modifier.isPublic(mods))
+            list.add(PRIVATE);
 
         if (Modifier.isStatic(mods))
             list.add(STATIC);

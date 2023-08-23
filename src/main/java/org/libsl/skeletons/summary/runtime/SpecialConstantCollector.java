@@ -1,4 +1,7 @@
-package org.libsl.skeletons.summary;
+package org.libsl.skeletons.summary.runtime;
+
+import org.libsl.skeletons.summary.Annotations;
+import org.libsl.skeletons.summary.ClassSummary;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

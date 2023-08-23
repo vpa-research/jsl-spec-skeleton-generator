@@ -3,7 +3,7 @@ package org.libsl.skeletons.sources.bytecode;
 import java.io.IOException;
 
 public final class ResourceClassLoader implements BytecodeLoader {
-    private final ClassLoader classLoader = Object.class.getClassLoader();
+    private final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
     @Override
     public byte[] loadBytecodeFor(final String canonicalClassName) {

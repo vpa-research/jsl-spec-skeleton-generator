@@ -12,20 +12,24 @@ public final class MethodSummary {
     public final Set<String> annotations = new LinkedHashSet<>();
     public final Map<String, VariableSummary> parameters = new LinkedHashMap<>();
     public String body = BODY_DEFAULT;
+    public String originClassName = "?";
 
     public enum Kind {
         METHOD,
         CONSTRUCTOR
     }
 
-    public MethodSummary(String name, String signature, Kind kind, String returnType) {
+    public MethodSummary(final String name,
+                         final String signature,
+                         final Kind kind,
+                         final String returnType) {
         this.simpleName = name;
         this.signature = signature;
         this.isConstructor = kind == Kind.CONSTRUCTOR;
         this.returnType = returnType;
     }
 
-    public static String getSignature(String name, Class<?>[] params) {
+    public static String getSignature(final String name, final Class<?>[] params) {
         final var sj = new StringJoiner(", ", "(", ")");
         for (var clazz : params)
             sj.add(clazz.getSimpleName());

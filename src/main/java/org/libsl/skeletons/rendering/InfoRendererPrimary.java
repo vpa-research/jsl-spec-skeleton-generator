@@ -34,6 +34,9 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
             if (!INLINE_ANNOTATIONS.contains(ann))
                 out.addln(ann);
 
+        // a comment on the source for the method
+        out.add("// within ").addln(method.originClassName);
+
         for (var ann : method.annotations)
             if (INLINE_ANNOTATIONS.contains(ann))
                 out.add(ann).add(" ");
@@ -215,8 +218,8 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
             out.addln("shift %s -> %s by [", "Allocated", "Initialized");
             out.beginBlock();
 
-            renderShiftCollection("constructors", summary.constructors.values());
-            renderShiftCollection("static operations", summary.staticMethods.values());
+            renderShiftCollection("constructors", summary.constructors.values(), false);
+            renderShiftCollection("static operations", summary.staticMethods.values(), true);
 
             out.endBlock();
             out.addln("];");
@@ -226,14 +229,15 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
         out.addln("shift %s -> %s by [", "Initialized", "self");
         out.beginBlock();
 
-        renderShiftCollection("instance methods", summary.instanceMethods.values());
+        renderShiftCollection("instance methods", summary.instanceMethods.values(), false);
 
         out.endBlock();
         out.addln("];");
     }
 
     private void renderShiftCollection(final String section,
-                                       final Collection<MethodSummary> methods) {
+                                       final Collection<MethodSummary> methods,
+                                       final boolean isStatic) {
         if (methods.isEmpty())
             return;
 
@@ -245,6 +249,9 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
             if (summary.hasOverloads(m.simpleName)) {
                 // render parameters
                 final var sj = new StringJoiner(", ", " (", ")");
+                if (!isStatic)
+                    sj.add(summary.simpleName);
+
                 for (var parameter : m.parameters.values())
                     sj.add(parameter.simpleType);
 

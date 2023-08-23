@@ -1,4 +1,4 @@
-package org.libsl.skeletons.summary;
+package org.libsl.skeletons.summary.runtime;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
