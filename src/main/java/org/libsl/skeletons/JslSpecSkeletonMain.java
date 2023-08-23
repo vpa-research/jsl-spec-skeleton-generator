@@ -12,7 +12,7 @@ import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * Examples of execution parameters (both (1) and (2) variants should produce the same result):
@@ -36,7 +36,9 @@ public final class JslSpecSkeletonMain {
 
     public void run() {
         final var targetClass = getTargetClass();
-        final var summary = getClassSummary(targetClass);
+        final var analyzer = getClassAnalyzer();
+
+        final var summary = analyzer.apply(targetClass);
         final var renderer = getRenderer(summary);
 
         renderer.render();
@@ -47,34 +49,40 @@ public final class JslSpecSkeletonMain {
         if (target == null) {
             System.err.println(
                     "[!] Class have not been specified. " +
-                    "Use 'class=<canonical-name>' to specify the class for analysis " +
-                    "(Note: use '$' separator for sub-classes)");
+                            "Use 'class=<canonical-name>' to specify the class for analysis " +
+                            "(Note: use '$' separator for sub-classes)");
             System.exit(-1);
         }
 
         return target;
     }
 
-    private ClassSummary getClassSummary(final String targetClass) {
-        final var collectGenerics = !"false".equalsIgnoreCase(props.getProperty("generics", "false"));
+    private Function<String, ClassSummary> getClassAnalyzer() {
+        final var collectGenerics =
+                !"false".equalsIgnoreCase(props.getProperty("generics", "false"));
 
-        final Supplier<ClassSummary> supplier;
+        final var includeInheritedMethods =
+                !"false".equalsIgnoreCase(props.getProperty("include-inherited", "false"));
 
-        final var source = props.getProperty("data-source", "reflection");
-        switch (source) {
+        final var dataSource = props.getProperty("data-source", "reflection");
+        switch (dataSource) {
             case "reflection":
-                supplier = new ReflectionClassAnalyzer(loadClassFromRuntime(targetClass))::collectInfo;
-                break;
+                return canonicalName -> {
+                    final var source = loadClassFromRuntime(canonicalName);
+                    final var classAnalyzer = new ReflectionClassAnalyzer(
+                            source,
+                            collectGenerics,
+                            includeInheritedMethods
+                    );
+                    return classAnalyzer.collectInfo();
+                };
 
             case "bytecode":
-                supplier = null;
-                break;
+                return null;
 
             default:
-                throw new AssertionError("Unknown class data source: " + source);
+                throw new AssertionError("Unknown class data source: " + dataSource);
         }
-
-        return supplier.get();
     }
 
     private static Class<?> loadClassFromRuntime(final String canonicalName) {
@@ -131,6 +139,11 @@ public final class JslSpecSkeletonMain {
     }
 
     public static void main(final String[] args) {
+        System.err.println("[i] CLI args:");
+        for (var arg : args)
+            System.err.println("- " + arg);
+        System.err.flush();
+
         new JslSpecSkeletonMain(args).run();
     }
 }

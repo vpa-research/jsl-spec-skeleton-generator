@@ -36,7 +36,7 @@ class IndirectRendererTest {
         final String targetSrc = TestUtils.loadExampleFile("skeletons/indirect/" + target + ".lsl");
         final Class<?> targetClass = JslClassCache.findClass(target);
 
-        final ClassSummary summary = new ReflectionClassAnalyzer(targetClass).collectInfo();
+        final ClassSummary summary = new ReflectionClassAnalyzer(targetClass, true, false).collectInfo();
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {

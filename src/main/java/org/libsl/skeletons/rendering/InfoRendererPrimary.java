@@ -35,7 +35,8 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
                 out.addln(ann);
 
         // a comment on the source for the method
-        out.add("// within ").addln(method.originClassName);
+        if (method.originClassName != null)
+            out.add("// within ").addln(method.originClassName);
 
         for (var ann : method.annotations)
             if (INLINE_ANNOTATIONS.contains(ann))

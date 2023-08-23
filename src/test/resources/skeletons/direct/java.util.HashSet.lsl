@@ -27,7 +27,7 @@ import "list-actions.lsl";
 @implements("java.io.Serializable")
 @public automaton HashSet: int
 (
-    @static @final var serialVersionUID: long = -5024744406713321676;
+    @private @static @final var serialVersionUID: long = -5024744406713321676;
 )
 {
     // states and shifts
@@ -61,7 +61,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor HashSet (arg0: int, arg1: float, arg2: boolean)
+    @private constructor HashSet (arg0: int, arg1: float, arg2: boolean)
     {
         action TODO();
     }

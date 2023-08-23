@@ -25,7 +25,7 @@ import "list-actions.lsl";
 @implements("java.io.Serializable")
 @public type HashSet
 {
-    @static @final var serialVersionUID: long = -5024744406713321676;
+    @private @static @final var serialVersionUID: long = -5024744406713321676;
 }
 
 
@@ -67,7 +67,7 @@ import "list-actions.lsl";
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, arg0: int, arg1: float, arg2: boolean)
+    @private constructor `HashSet#HashSet` (@target obj: HashSet, arg0: int, arg1: float, arg2: boolean)
     {
         action TODO();
     }

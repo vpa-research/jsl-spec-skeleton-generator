@@ -14,10 +14,16 @@ import java.util.stream.Collectors;
 public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     private final Class<?> source;
     private final ClassSummary summary;
+    private final boolean collectGenerics;
+    private final boolean includeInheritedMethods;
 
-    public ReflectionClassAnalyzer(final Class<?> source) {
+    public ReflectionClassAnalyzer(final Class<?> source,
+                                   final boolean collectGenerics,
+                                   final boolean includeInheritedMethods) {
         this.source = source;
         this.summary = new ClassSummary(source.getSimpleName(), source.getTypeName());
+        this.collectGenerics = collectGenerics;
+        this.includeInheritedMethods = includeInheritedMethods;
 
         suppressIllegalAccessWarning();
     }
@@ -90,7 +96,10 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             final var methodSummary = summary.addConstructor(signature);
 
             // set the origin
-            methodSummary.originClassName = c.getDeclaringClass().getCanonicalName();
+            methodSummary.originClassName =
+                    c.getDeclaringClass() != source
+                            ? c.getDeclaringClass().getCanonicalName()
+                            : null;
 
             // generics in declaration
             final var declarationParameters = c.getTypeParameters();
@@ -115,8 +124,13 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     }
 
     private void collectMethodsInfo() {
+        final var methodList =
+                includeInheritedMethods
+                        ? source.getMethods()
+                        : source.getDeclaredMethods();
+
         // public methods (including static ones)
-        for (var m : source.getMethods()) {
+        for (var m : methodList) {
             final var mods = m.getModifiers();
             if (!ElementClassifier.isSuitablePublicMethod(m))
                 continue;
@@ -134,7 +148,10 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
                 methodSummary = summary.addInstanceMethod(methodName, signature, retTypeSummary.simpleType);
 
             // set the origin info
-            methodSummary.originClassName = m.getDeclaringClass().getCanonicalName();
+            methodSummary.originClassName =
+                    m.getDeclaringClass() != source
+                            ? m.getDeclaringClass().getCanonicalName()
+                            : null;
 
             // generics in declaration
             final var declarationParameters = m.getTypeParameters();

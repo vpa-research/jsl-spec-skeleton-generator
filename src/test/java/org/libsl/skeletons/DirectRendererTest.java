@@ -36,7 +36,7 @@ class DirectRendererTest {
         final String targetSrc = TestUtils.loadExampleFile("skeletons/direct/" + target + ".lsl");
         final Class<?> targetClass = JslClassCache.findClass(target);
 
-        final var summary = new ReflectionClassAnalyzer(targetClass).collectInfo();
+        final var summary = new ReflectionClassAnalyzer(targetClass, true, false).collectInfo();
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {
