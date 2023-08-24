@@ -1,12 +1,17 @@
 package org.libsl.skeletons.summary.runtime;
 
+import org.libsl.skeletons.sources.bytecode.BytecodeLoader;
+import org.libsl.skeletons.sources.bytecode.ResourceClassLoader;
 import org.libsl.skeletons.summary.Annotations;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.MethodSummary;
+import org.libsl.skeletons.util.ReflectionUtils;
+import org.objectweb.asm.*;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.*;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,6 +21,8 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     private final ClassSummary summary;
     private final boolean collectGenerics;
     private final boolean includeInheritedMethods;
+    private final BytecodeLoader bytecodeLoader = new ResourceClassLoader();
+    private final Map<String, ClassReader> classReaderCache = new HashMap<>();
 
     public ReflectionClassAnalyzer(final Class<?> source,
                                    final boolean collectGenerics,
@@ -41,6 +48,11 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
         }
     }
 
+    private ClassReader getClassFromBytecode(final String name) {
+        return classReaderCache.computeIfAbsent(name,
+                n -> new ClassReader(bytecodeLoader.loadBytecodeFor(n)));
+    }
+
     private String genericsFilter(final String in) {
         final var regex = Pattern.quote(source.getCanonicalName());
         return in.replaceAll(regex, source.getSimpleName());
@@ -53,20 +65,20 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     }
 
     private void collectParameters(final MethodSummary method,
-                                   final Parameter[] parameters,
+                                   final String[] parameterNames,
                                    final Type[] genericParameterTypes) {
-        if (parameters.length != genericParameterTypes.length)
+        if (parameterNames.length != genericParameterTypes.length)
             throw new AssertionError("Mismatching parameter sizes !!!");
 
-        for (int i = 0; i < parameters.length; i++) {
-            final var param = parameters[i];
+        for (int i = 0; i < parameterNames.length; i++) {
+            final var param = parameterNames[i];
             final var type = genericParameterTypes[i];
 
             // parse the type of the parameter
             final var paramSummary = GenericTypeSplitter.split(type);
 
             // create a new "variable"
-            final var paramVar = method.addParameter(param.getName(), paramSummary.simpleType);
+            final var paramVar = method.addParameter(param, paramSummary.simpleType);
 
             // add annotations
             if (paramSummary.hasTypeArguments) {
@@ -119,8 +131,54 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(c.getModifiers()));
 
             // parameters
-            collectParameters(methodSummary, c.getParameters(), c.getGenericParameterTypes());
+            final var jreDescriptor = ReflectionUtils.getSignature(c);
+            final var parameterNames = getParameterNames(source, "<init>", jreDescriptor, c.getParameters());
+            collectParameters(methodSummary, parameterNames, c.getGenericParameterTypes());
         }
+    }
+
+    private String[] getParameterNames(final Class<?> clazz,
+                                       final String methodName,
+                                       final String jreDescriptor,
+                                       final Parameter[] parameters) {
+        final var result = new String[parameters.length];
+
+        // backup option
+        for (int i = 0; i < parameters.length; i++)
+            result[i] = parameters[i].getName();
+
+        // fetch actual names from bytecode
+        final var minedParameterNames = new ArrayList<String>();
+
+        final var reader = getClassFromBytecode(clazz.getTypeName());
+        final var classVisitor = new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+                if (!methodName.equals(name) || !jreDescriptor.equals(descriptor))
+                    return null;
+
+                return new MethodVisitor(Opcodes.ASM9) {
+                    @Override
+                    public void visitParameter(String name, int access) {
+                        minedParameterNames.add(name);
+                    }
+
+                    @Override
+                    public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
+                        minedParameterNames.add(name);
+                    }
+                };
+            }
+        };
+        reader.accept(classVisitor, 0);
+
+        // reconstruct names
+        final var baseIndex = Math.max(minedParameterNames.indexOf("this") + 1, 0);
+        final var minedParameterCount = Math.min(minedParameterNames.size(), parameters.length);
+        for (int i = 0; i < minedParameterCount; i++)
+            result[i] = minedParameterNames.get(baseIndex + i);
+
+        return result;
     }
 
     private void collectMethodsInfo() {
@@ -177,7 +235,9 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(m.getModifiers()));
 
             // parameters
-            collectParameters(methodSummary, m.getParameters(), m.getGenericParameterTypes());
+            final var jreDescriptor = ReflectionUtils.getSignature(m);
+            final var parameterNames = getParameterNames(m.getDeclaringClass(), methodName, jreDescriptor, m.getParameters());
+            collectParameters(methodSummary, parameterNames, m.getGenericParameterTypes());
         }
     }
 

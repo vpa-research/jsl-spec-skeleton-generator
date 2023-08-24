@@ -1,13 +1,62 @@
 package org.libsl.skeletons.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 import static org.libsl.skeletons.util.UnsafeUtils.unchecked;
 
 public final class ReflectionUtils {
+    private static final Map<Class<?>, String> PRIMITIVE_TO_SIGNATURE = new HashMap<Class<?>, String>(9);
+
+    static {
+        PRIMITIVE_TO_SIGNATURE.put(byte.class, "B");
+        PRIMITIVE_TO_SIGNATURE.put(char.class, "C");
+        PRIMITIVE_TO_SIGNATURE.put(short.class, "S");
+        PRIMITIVE_TO_SIGNATURE.put(int.class, "I");
+        PRIMITIVE_TO_SIGNATURE.put(long.class, "J");
+        PRIMITIVE_TO_SIGNATURE.put(float.class, "F");
+        PRIMITIVE_TO_SIGNATURE.put(double.class, "D");
+        PRIMITIVE_TO_SIGNATURE.put(void.class, "V");
+        PRIMITIVE_TO_SIGNATURE.put(boolean.class, "Z");
+    }
+
     private ReflectionUtils() {
+    }
+
+    /**
+     * Returns the internal name of {@code clazz} (also known as the descriptor).
+     */
+    public static String getSignature(final Class<?> clazz) {
+        final var primitiveSignature = PRIMITIVE_TO_SIGNATURE.get(clazz);
+        if (primitiveSignature != null)
+            return primitiveSignature;
+        else if (clazz.isArray())
+            return "[" + getSignature(clazz.getComponentType());
+        else
+            return "L" + clazz.getName().replace('.', '/') + ";";
+    }
+
+    public static String getSignature(final Method method) {
+        final var result = new StringJoiner("", "(", ")");
+
+        for (var pType : method.getParameterTypes())
+            result.add(getSignature(pType));
+
+        return result + getSignature(method.getReturnType());
+    }
+
+    public static String getSignature(final Constructor<?> constructor) {
+        final var result = new StringJoiner("", "(", ")");
+
+        for (var pType : constructor.getParameterTypes())
+            result.add(getSignature(pType));
+
+        return result + "V";
     }
 
     // https://stackoverflow.com/a/52335318
