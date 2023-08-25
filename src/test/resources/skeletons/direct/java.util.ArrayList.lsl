@@ -46,13 +46,13 @@ import "list-actions.lsl";
     }
 
 
-    constructor ArrayList (@Parameterized(["? extends E"]) arg0: Collection)
+    constructor ArrayList (@Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor ArrayList (arg0: int)
+    constructor ArrayList (initialCapacity: int)
     {
         action TODO();
     }
@@ -64,25 +64,25 @@ import "list-actions.lsl";
 
     // methods
 
-    fun add (arg0: E): boolean
+    fun add (e: E): boolean
     {
         action TODO();
     }
 
 
-    fun add (arg0: int, arg1: E): void
+    fun add (index: int, element: E): void
     {
         action TODO();
     }
 
 
-    fun addAll (@Parameterized(["? extends E"]) arg0: Collection): boolean
+    fun addAll (@Parameterized(["? extends E"]) c: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun addAll (arg0: int, @Parameterized(["? extends E"]) arg1: Collection): boolean
+    fun addAll (index: int, @Parameterized(["? extends E"]) c: Collection): boolean
     {
         action TODO();
     }
@@ -100,31 +100,31 @@ import "list-actions.lsl";
     }
 
 
-    fun contains (arg0: Object): boolean
+    fun contains (o: Object): boolean
     {
         action TODO();
     }
 
 
-    fun ensureCapacity (arg0: int): void
+    fun ensureCapacity (minCapacity: int): void
     {
         action TODO();
     }
 
 
-    fun equals (arg0: Object): boolean
+    fun equals (o: Object): boolean
     {
         action TODO();
     }
 
 
-    fun forEach (@Parameterized(["? super E"]) arg0: Consumer): void
+    fun forEach (@Parameterized(["? super E"]) _action: Consumer): void
     {
         action TODO();
     }
 
 
-    fun get (arg0: int): E
+    fun get (index: int): E
     {
         action TODO();
     }
@@ -136,7 +136,7 @@ import "list-actions.lsl";
     }
 
 
-    fun indexOf (arg0: Object): int
+    fun indexOf (o: Object): int
     {
         action TODO();
     }
@@ -155,7 +155,7 @@ import "list-actions.lsl";
     }
 
 
-    fun lastIndexOf (arg0: Object): int
+    fun lastIndexOf (o: Object): int
     {
         action TODO();
     }
@@ -169,49 +169,49 @@ import "list-actions.lsl";
 
 
     @ParameterizedResult(["E"])
-    fun listIterator (arg0: int): ListIterator
+    fun listIterator (index: int): ListIterator
     {
         action TODO();
     }
 
 
-    fun remove (arg0: Object): boolean
+    fun remove (o: Object): boolean
     {
         action TODO();
     }
 
 
-    fun remove (arg0: int): E
+    fun remove (index: int): E
     {
         action TODO();
     }
 
 
-    fun removeAll (@Parameterized(["?"]) arg0: Collection): boolean
+    fun removeAll (@Parameterized(["?"]) c: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun removeIf (@Parameterized(["? super E"]) arg0: Predicate): boolean
+    fun removeIf (@Parameterized(["? super E"]) filter: Predicate): boolean
     {
         action TODO();
     }
 
 
-    fun replaceAll (@Parameterized(["E"]) arg0: UnaryOperator): void
+    fun replaceAll (@Parameterized(["E"]) operator: UnaryOperator): void
     {
         action TODO();
     }
 
 
-    fun retainAll (@Parameterized(["?"]) arg0: Collection): boolean
+    fun retainAll (@Parameterized(["?"]) c: Collection): boolean
     {
         action TODO();
     }
 
 
-    fun set (arg0: int, arg1: E): E
+    fun set (index: int, element: E): E
     {
         action TODO();
     }
@@ -223,7 +223,7 @@ import "list-actions.lsl";
     }
 
 
-    fun sort (@Parameterized(["? super E"]) arg0: Comparator): void
+    fun sort (@Parameterized(["? super E"]) c: Comparator): void
     {
         action TODO();
     }
@@ -237,7 +237,7 @@ import "list-actions.lsl";
 
 
     @ParameterizedResult(["E"])
-    fun subList (arg0: int, arg1: int): List
+    fun subList (fromIndex: int, toIndex: int): List
     {
         action TODO();
     }
@@ -250,7 +250,7 @@ import "list-actions.lsl";
 
 
     @Parameterized(["T"])
-    fun toArray (arg0: array<T>): array<T>
+    fun toArray (a: array<T>): array<T>
     {
         action TODO();
     }

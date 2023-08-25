@@ -49,25 +49,25 @@ import "list-actions.lsl";
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, @Parameterized(["? extends E"]) arg0: Collection)
+    constructor `HashSet#HashSet` (@target obj: HashSet, @Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, arg0: int)
+    constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, arg0: int, arg1: float)
+    constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
 
 
-    @private constructor `HashSet#HashSet` (@target obj: HashSet, arg0: int, arg1: float, arg2: boolean)
+    @private constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int, loadFactor: float, dummy: boolean)
     {
         action TODO();
     }
@@ -79,7 +79,7 @@ import "list-actions.lsl";
 
     // methods
 
-    fun `HashSet#add` (@target obj: HashSet, arg0: E): boolean
+    fun `HashSet#add` (@target obj: HashSet, e: E): boolean
     {
         action TODO();
     }
@@ -97,7 +97,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashSet#contains` (@target obj: HashSet, arg0: Object): boolean
+    fun `HashSet#contains` (@target obj: HashSet, o: Object): boolean
     {
         action TODO();
     }
@@ -116,7 +116,7 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashSet#remove` (@target obj: HashSet, arg0: Object): boolean
+    fun `HashSet#remove` (@target obj: HashSet, o: Object): boolean
     {
         action TODO();
     }

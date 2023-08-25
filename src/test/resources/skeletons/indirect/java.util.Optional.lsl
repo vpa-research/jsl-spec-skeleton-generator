@@ -48,7 +48,7 @@ import "list-actions.lsl";
     }
 
 
-    @private constructor `Optional#Optional` (@target obj: Optional, arg0: T)
+    @private constructor `Optional#Optional` (@target obj: Optional, value: T)
     {
         action TODO();
     }
@@ -68,7 +68,7 @@ import "list-actions.lsl";
 
     @Parameterized(["T"])
     @ParameterizedResult(["T"])
-    @static fun `Optional#of` (arg0: T): Optional
+    @static fun `Optional#of` (value: T): Optional
     {
         action TODO();
     }
@@ -76,7 +76,7 @@ import "list-actions.lsl";
 
     @Parameterized(["T"])
     @ParameterizedResult(["T"])
-    @static fun `Optional#ofNullable` (arg0: T): Optional
+    @static fun `Optional#ofNullable` (value: T): Optional
     {
         action TODO();
     }
@@ -84,14 +84,14 @@ import "list-actions.lsl";
 
     // methods
 
-    fun `Optional#equals` (@target obj: Optional, arg0: Object): boolean
+    fun `Optional#equals` (@target obj: Optional, obj: Object): boolean
     {
         action TODO();
     }
 
 
     @ParameterizedResult(["T"])
-    fun `Optional#filter` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Predicate): Optional
+    fun `Optional#filter` (@target obj: Optional, @Parameterized(["? super T"]) predicate: Predicate): Optional
     {
         action TODO();
     }
@@ -99,7 +99,7 @@ import "list-actions.lsl";
 
     @Parameterized(["U"])
     @ParameterizedResult(["U"])
-    fun `Optional#flatMap` (@target obj: Optional, @Parameterized(["? super T", "? extends Optional<? extends U>"]) arg0: Function): Optional
+    fun `Optional#flatMap` (@target obj: Optional, @Parameterized(["? super T", "? extends Optional<? extends U>"]) mapper: Function): Optional
     {
         action TODO();
     }
@@ -117,13 +117,13 @@ import "list-actions.lsl";
     }
 
 
-    fun `Optional#ifPresent` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Consumer): void
+    fun `Optional#ifPresent` (@target obj: Optional, @Parameterized(["? super T"]) _action: Consumer): void
     {
         action TODO();
     }
 
 
-    fun `Optional#ifPresentOrElse` (@target obj: Optional, @Parameterized(["? super T"]) arg0: Consumer, arg1: Runnable): void
+    fun `Optional#ifPresentOrElse` (@target obj: Optional, @Parameterized(["? super T"]) _action: Consumer, emptyAction: Runnable): void
     {
         action TODO();
     }
@@ -143,26 +143,26 @@ import "list-actions.lsl";
 
     @Parameterized(["U"])
     @ParameterizedResult(["U"])
-    fun `Optional#map` (@target obj: Optional, @Parameterized(["? super T", "? extends U"]) arg0: Function): Optional
+    fun `Optional#map` (@target obj: Optional, @Parameterized(["? super T", "? extends U"]) mapper: Function): Optional
     {
         action TODO();
     }
 
 
     @ParameterizedResult(["T"])
-    fun `Optional#or` (@target obj: Optional, @Parameterized(["? extends Optional<? extends T>"]) arg0: Supplier): Optional
+    fun `Optional#or` (@target obj: Optional, @Parameterized(["? extends Optional<? extends T>"]) supplier: Supplier): Optional
     {
         action TODO();
     }
 
 
-    fun `Optional#orElse` (@target obj: Optional, arg0: T): T
+    fun `Optional#orElse` (@target obj: Optional, other: T): T
     {
         action TODO();
     }
 
 
-    fun `Optional#orElseGet` (@target obj: Optional, @Parameterized(["? extends T"]) arg0: Supplier): T
+    fun `Optional#orElseGet` (@target obj: Optional, @Parameterized(["? extends T"]) supplier: Supplier): T
     {
         action TODO();
     }
@@ -176,7 +176,7 @@ import "list-actions.lsl";
 
     @Parameterized(["X extends java.lang.Throwable"])
     @throws(["X"])
-    fun `Optional#orElseThrow` (@target obj: Optional, @Parameterized(["? extends X"]) arg0: Supplier): T
+    fun `Optional#orElseThrow` (@target obj: Optional, @Parameterized(["? extends X"]) exceptionSupplier: Supplier): T
     {
         action TODO();
     }

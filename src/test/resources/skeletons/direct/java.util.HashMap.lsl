@@ -45,19 +45,19 @@ import "list-actions.lsl";
     }
 
 
-    constructor HashMap (@Parameterized(["? extends K", "? extends V"]) arg0: Map)
+    constructor HashMap (@Parameterized(["? extends K", "? extends V"]) m: Map)
     {
         action TODO();
     }
 
 
-    constructor HashMap (arg0: int)
+    constructor HashMap (initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor HashMap (arg0: int, arg1: float)
+    constructor HashMap (initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
@@ -81,31 +81,31 @@ import "list-actions.lsl";
     }
 
 
-    fun compute (arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
+    fun compute (key: K, @Parameterized(["? super K", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun computeIfAbsent (arg0: K, @Parameterized(["? super K", "? extends V"]) arg1: Function): V
+    fun computeIfAbsent (key: K, @Parameterized(["? super K", "? extends V"]) mappingFunction: Function): V
     {
         action TODO();
     }
 
 
-    fun computeIfPresent (arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
+    fun computeIfPresent (key: K, @Parameterized(["? super K", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun containsKey (arg0: Object): boolean
+    fun containsKey (key: Object): boolean
     {
         action TODO();
     }
 
 
-    fun containsValue (arg0: Object): boolean
+    fun containsValue (value: Object): boolean
     {
         action TODO();
     }
@@ -118,19 +118,19 @@ import "list-actions.lsl";
     }
 
 
-    fun forEach (@Parameterized(["? super K", "? super V"]) arg0: BiConsumer): void
+    fun forEach (@Parameterized(["? super K", "? super V"]) _action: BiConsumer): void
     {
         action TODO();
     }
 
 
-    fun get (arg0: Object): V
+    fun get (key: Object): V
     {
         action TODO();
     }
 
 
-    fun getOrDefault (arg0: Object, arg1: V): V
+    fun getOrDefault (key: Object, defaultValue: V): V
     {
         action TODO();
     }
@@ -149,55 +149,55 @@ import "list-actions.lsl";
     }
 
 
-    fun merge (arg0: K, arg1: V, @Parameterized(["? super V", "? super V", "? extends V"]) arg2: BiFunction): V
+    fun merge (key: K, value: V, @Parameterized(["? super V", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun put (arg0: K, arg1: V): V
+    fun put (key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun putAll (@Parameterized(["? extends K", "? extends V"]) arg0: Map): void
+    fun putAll (@Parameterized(["? extends K", "? extends V"]) m: Map): void
     {
         action TODO();
     }
 
 
-    fun putIfAbsent (arg0: K, arg1: V): V
+    fun putIfAbsent (key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun remove (arg0: Object): V
+    fun remove (key: Object): V
     {
         action TODO();
     }
 
 
-    fun remove (arg0: Object, arg1: Object): boolean
+    fun remove (key: Object, value: Object): boolean
     {
         action TODO();
     }
 
 
-    fun replace (arg0: K, arg1: V): V
+    fun replace (key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun replace (arg0: K, arg1: V, arg2: V): boolean
+    fun replace (key: K, oldValue: V, newValue: V): boolean
     {
         action TODO();
     }
 
 
-    fun replaceAll (@Parameterized(["? super K", "? super V", "? extends V"]) arg0: BiFunction): void
+    fun replaceAll (@Parameterized(["? super K", "? super V", "? extends V"]) function: BiFunction): void
     {
         action TODO();
     }

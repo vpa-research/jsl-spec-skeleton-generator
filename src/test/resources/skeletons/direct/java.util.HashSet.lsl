@@ -43,25 +43,25 @@ import "list-actions.lsl";
     }
 
 
-    constructor HashSet (@Parameterized(["? extends E"]) arg0: Collection)
+    constructor HashSet (@Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor HashSet (arg0: int)
+    constructor HashSet (initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor HashSet (arg0: int, arg1: float)
+    constructor HashSet (initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
 
 
-    @private constructor HashSet (arg0: int, arg1: float, arg2: boolean)
+    @private constructor HashSet (initialCapacity: int, loadFactor: float, dummy: boolean)
     {
         action TODO();
     }
@@ -73,7 +73,7 @@ import "list-actions.lsl";
 
     // methods
 
-    fun add (arg0: E): boolean
+    fun add (e: E): boolean
     {
         action TODO();
     }
@@ -91,7 +91,7 @@ import "list-actions.lsl";
     }
 
 
-    fun contains (arg0: Object): boolean
+    fun contains (o: Object): boolean
     {
         action TODO();
     }
@@ -110,7 +110,7 @@ import "list-actions.lsl";
     }
 
 
-    fun remove (arg0: Object): boolean
+    fun remove (o: Object): boolean
     {
         action TODO();
     }

@@ -47,87 +47,87 @@ import "list-actions.lsl";
     // methods
 
     @Parameterized(["A"])
-    fun aaaaa (arg0: A): void
+    fun aaaaa (x: A): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Runnable"])
-    fun bbbbb (arg0: A): void
+    fun bbbbb (x: A): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Class<A>"])
-    fun ccccc (arg0: A): void
+    fun ccccc (x: A): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Class<A> & java.lang.Runnable & java.lang.Iterable<A>"])
-    fun ddddd (arg0: A): void
+    fun ddddd (x: A): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Iterable<A> & java.lang.Runnable", "B"])
-    fun eeeee (@Parameterized(["? super java.lang.Iterable<B>"]) arg0: Iterable): void
+    fun eeeee (@Parameterized(["? super java.lang.Iterable<B>"]) x: Iterable): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Iterable<B>", "B extends java.lang.Iterable<C>", "C extends java.lang.Iterable<A>"])
-    fun fffff (arg0: A): void
+    fun fffff (x: A): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A extends java.lang.Iterable<B>", "B extends java.lang.Iterable<A> & java.lang.Comparable<C>", "C extends java.lang.Iterable<B>"])
-    fun fffff__2 (arg0: C): void
+    fun fffff__2 (x: C): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A", "B extends java.lang.Iterable<? super A>"])
-    fun ggggg (arg0: B): void
+    fun ggggg (x: B): void
     {
         action TODO();
     }
 
 
-    fun hhhhh (@Parameterized(["?"]) arg0: Iterable): void
+    fun hhhhh (@Parameterized(["?"]) x: Iterable): void
     {
         action TODO();
     }
 
 
-    fun iiiii (@Parameterized(["? extends java.lang.Runnable"]) arg0: Iterable): void
+    fun iiiii (@Parameterized(["? extends java.lang.Runnable"]) x: Iterable): void
     {
         action TODO();
     }
 
 
-    fun jjjjj (@Parameterized(["? super java.lang.Runnable"]) arg0: Iterable): void
+    fun jjjjj (@Parameterized(["? super java.lang.Runnable"]) x: Iterable): void
     {
         action TODO();
     }
 
 
-    fun kkkkk (@Parameterized(["? super java.lang.Iterable<?>"]) arg0: Iterable): void
+    fun kkkkk (@Parameterized(["? super java.lang.Iterable<?>"]) x: Iterable): void
     {
         action TODO();
     }
 
 
     @Parameterized(["A", "B extends java.util.function.BiConsumer<A, C>", "C"])
-    fun lllll (arg0: B): void
+    fun lllll (x: B): void
     {
         action TODO();
     }

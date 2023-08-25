@@ -1,6 +1,7 @@
 package org.libsl.skeletons.rendering;
 
 import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.KeywordFilter;
 import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
@@ -42,7 +43,7 @@ public final class InfoRendererDirect extends AbstractInfoRenderer {
         for (var p : method.parameters.values()) {
             p.annotations.forEach(a -> out.add(a).add(" "));
 
-            out.add(p.name).add(": ").add(p.simpleType);
+            out.add(KeywordFilter.renameIfKeyword(p.name)).add(": ").add(p.simpleType);
 
             if (pCounter-- > 1)
                 out.add(", ");

@@ -6,6 +6,7 @@ import org.libsl.skeletons.summary.Annotations;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.MethodSummary;
+import org.libsl.skeletons.summary.bytecode.ParameterNameMiner;
 import org.libsl.skeletons.util.ReflectionUtils;
 import org.objectweb.asm.*;
 import sun.misc.Unsafe;
@@ -148,35 +149,11 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             result[i] = parameters[i].getName();
 
         // fetch actual names from bytecode
-        final var minedParameterNames = new ArrayList<String>();
-
-        final var reader = getClassFromBytecode(clazz.getTypeName());
-        final var classVisitor = new ClassVisitor(Opcodes.ASM9) {
-            @Override
-            public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-                if (!methodName.equals(name) || !jreDescriptor.equals(descriptor))
-                    return null;
-
-                return new MethodVisitor(Opcodes.ASM9) {
-                    @Override
-                    public void visitParameter(String name, int access) {
-                        minedParameterNames.add(name);
-                    }
-
-                    @Override
-                    public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
-                        minedParameterNames.add(name);
-                    }
-                };
-            }
-        };
-        reader.accept(classVisitor, 0);
-
-        // reconstruct names
-        final var baseIndex = Math.max(minedParameterNames.indexOf("this") + 1, 0);
-        final var minedParameterCount = Math.min(minedParameterNames.size(), parameters.length);
-        for (int i = 0; i < minedParameterCount; i++)
-            result[i] = minedParameterNames.get(baseIndex + i);
+        ParameterNameMiner.mineParameterNames(
+                getClassFromBytecode(clazz.getTypeName()),
+                methodName,
+                jreDescriptor,
+                result);
 
         return result;
     }

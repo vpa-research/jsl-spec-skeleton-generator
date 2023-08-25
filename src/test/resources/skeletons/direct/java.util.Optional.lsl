@@ -42,7 +42,7 @@ import "list-actions.lsl";
     }
 
 
-    @private constructor Optional (arg0: T)
+    @private constructor Optional (value: T)
     {
         action TODO();
     }
@@ -62,7 +62,7 @@ import "list-actions.lsl";
 
     @Parameterized(["T"])
     @ParameterizedResult(["T"])
-    @static fun of (arg0: T): Optional
+    @static fun of (value: T): Optional
     {
         action TODO();
     }
@@ -70,7 +70,7 @@ import "list-actions.lsl";
 
     @Parameterized(["T"])
     @ParameterizedResult(["T"])
-    @static fun ofNullable (arg0: T): Optional
+    @static fun ofNullable (value: T): Optional
     {
         action TODO();
     }
@@ -78,14 +78,14 @@ import "list-actions.lsl";
 
     // methods
 
-    fun equals (arg0: Object): boolean
+    fun equals (obj: Object): boolean
     {
         action TODO();
     }
 
 
     @ParameterizedResult(["T"])
-    fun filter (@Parameterized(["? super T"]) arg0: Predicate): Optional
+    fun filter (@Parameterized(["? super T"]) predicate: Predicate): Optional
     {
         action TODO();
     }
@@ -93,7 +93,7 @@ import "list-actions.lsl";
 
     @Parameterized(["U"])
     @ParameterizedResult(["U"])
-    fun flatMap (@Parameterized(["? super T", "? extends Optional<? extends U>"]) arg0: Function): Optional
+    fun flatMap (@Parameterized(["? super T", "? extends Optional<? extends U>"]) mapper: Function): Optional
     {
         action TODO();
     }
@@ -111,13 +111,13 @@ import "list-actions.lsl";
     }
 
 
-    fun ifPresent (@Parameterized(["? super T"]) arg0: Consumer): void
+    fun ifPresent (@Parameterized(["? super T"]) _action: Consumer): void
     {
         action TODO();
     }
 
 
-    fun ifPresentOrElse (@Parameterized(["? super T"]) arg0: Consumer, arg1: Runnable): void
+    fun ifPresentOrElse (@Parameterized(["? super T"]) _action: Consumer, emptyAction: Runnable): void
     {
         action TODO();
     }
@@ -137,26 +137,26 @@ import "list-actions.lsl";
 
     @Parameterized(["U"])
     @ParameterizedResult(["U"])
-    fun map (@Parameterized(["? super T", "? extends U"]) arg0: Function): Optional
+    fun map (@Parameterized(["? super T", "? extends U"]) mapper: Function): Optional
     {
         action TODO();
     }
 
 
     @ParameterizedResult(["T"])
-    fun or (@Parameterized(["? extends Optional<? extends T>"]) arg0: Supplier): Optional
+    fun or (@Parameterized(["? extends Optional<? extends T>"]) supplier: Supplier): Optional
     {
         action TODO();
     }
 
 
-    fun orElse (arg0: T): T
+    fun orElse (other: T): T
     {
         action TODO();
     }
 
 
-    fun orElseGet (@Parameterized(["? extends T"]) arg0: Supplier): T
+    fun orElseGet (@Parameterized(["? extends T"]) supplier: Supplier): T
     {
         action TODO();
     }
@@ -170,7 +170,7 @@ import "list-actions.lsl";
 
     @Parameterized(["X extends java.lang.Throwable"])
     @throws(["X"])
-    fun orElseThrow (@Parameterized(["? extends X"]) arg0: Supplier): T
+    fun orElseThrow (@Parameterized(["? extends X"]) exceptionSupplier: Supplier): T
     {
         action TODO();
     }

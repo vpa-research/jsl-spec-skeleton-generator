@@ -51,19 +51,19 @@ import "list-actions.lsl";
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) arg0: Map)
+    constructor `HashMap#HashMap` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) m: Map)
     {
         action TODO();
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, arg0: int)
+    constructor `HashMap#HashMap` (@target obj: HashMap, initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, arg0: int, arg1: float)
+    constructor `HashMap#HashMap` (@target obj: HashMap, initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
@@ -87,31 +87,31 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#compute` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
+    fun `HashMap#compute` (@target obj: HashMap, key: K, @Parameterized(["? super K", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#computeIfAbsent` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? extends V"]) arg1: Function): V
+    fun `HashMap#computeIfAbsent` (@target obj: HashMap, key: K, @Parameterized(["? super K", "? extends V"]) mappingFunction: Function): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#computeIfPresent` (@target obj: HashMap, arg0: K, @Parameterized(["? super K", "? super V", "? extends V"]) arg1: BiFunction): V
+    fun `HashMap#computeIfPresent` (@target obj: HashMap, key: K, @Parameterized(["? super K", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#containsKey` (@target obj: HashMap, arg0: Object): boolean
+    fun `HashMap#containsKey` (@target obj: HashMap, key: Object): boolean
     {
         action TODO();
     }
 
 
-    fun `HashMap#containsValue` (@target obj: HashMap, arg0: Object): boolean
+    fun `HashMap#containsValue` (@target obj: HashMap, value: Object): boolean
     {
         action TODO();
     }
@@ -124,19 +124,19 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#forEach` (@target obj: HashMap, @Parameterized(["? super K", "? super V"]) arg0: BiConsumer): void
+    fun `HashMap#forEach` (@target obj: HashMap, @Parameterized(["? super K", "? super V"]) _action: BiConsumer): void
     {
         action TODO();
     }
 
 
-    fun `HashMap#get` (@target obj: HashMap, arg0: Object): V
+    fun `HashMap#get` (@target obj: HashMap, key: Object): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#getOrDefault` (@target obj: HashMap, arg0: Object, arg1: V): V
+    fun `HashMap#getOrDefault` (@target obj: HashMap, key: Object, defaultValue: V): V
     {
         action TODO();
     }
@@ -155,55 +155,55 @@ import "list-actions.lsl";
     }
 
 
-    fun `HashMap#merge` (@target obj: HashMap, arg0: K, arg1: V, @Parameterized(["? super V", "? super V", "? extends V"]) arg2: BiFunction): V
+    fun `HashMap#merge` (@target obj: HashMap, key: K, value: V, @Parameterized(["? super V", "? super V", "? extends V"]) remappingFunction: BiFunction): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#put` (@target obj: HashMap, arg0: K, arg1: V): V
+    fun `HashMap#put` (@target obj: HashMap, key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#putAll` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) arg0: Map): void
+    fun `HashMap#putAll` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) m: Map): void
     {
         action TODO();
     }
 
 
-    fun `HashMap#putIfAbsent` (@target obj: HashMap, arg0: K, arg1: V): V
+    fun `HashMap#putIfAbsent` (@target obj: HashMap, key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#remove` (@target obj: HashMap, arg0: Object): V
+    fun `HashMap#remove` (@target obj: HashMap, key: Object): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#remove` (@target obj: HashMap, arg0: Object, arg1: Object): boolean
+    fun `HashMap#remove` (@target obj: HashMap, key: Object, value: Object): boolean
     {
         action TODO();
     }
 
 
-    fun `HashMap#replace` (@target obj: HashMap, arg0: K, arg1: V): V
+    fun `HashMap#replace` (@target obj: HashMap, key: K, value: V): V
     {
         action TODO();
     }
 
 
-    fun `HashMap#replace` (@target obj: HashMap, arg0: K, arg1: V, arg2: V): boolean
+    fun `HashMap#replace` (@target obj: HashMap, key: K, oldValue: V, newValue: V): boolean
     {
         action TODO();
     }
 
 
-    fun `HashMap#replaceAll` (@target obj: HashMap, @Parameterized(["? super K", "? super V", "? extends V"]) arg0: BiFunction): void
+    fun `HashMap#replaceAll` (@target obj: HashMap, @Parameterized(["? super K", "? super V", "? extends V"]) function: BiFunction): void
     {
         action TODO();
     }
