@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 public final class ParameterNameMiner {
+    private static final String CONSTRUCTOR_NAME = "<init>";
+
     private ParameterNameMiner() {
     }
 
@@ -62,19 +64,22 @@ public final class ParameterNameMiner {
     }
 
     public static void mineParameterNames(final ClassReader clazz,
+                                          final boolean isIndependentClass,
                                           final String methodName,
                                           final String methodDescriptor,
                                           final String[] preparedParameters) {
         // prepare
         final var classVisitor = new ClassMiner(methodName, methodDescriptor);
+        final var isConstructor = CONSTRUCTOR_NAME.equals(methodName);
+        final var offsetThis = isConstructor && !isIndependentClass ? 0 : 1;
 
         // process
         clazz.accept(classVisitor, 0);
+        final var minedParameterNames = classVisitor.getMinedParameterNames();
+        final var minedParameterCount = Math.min(minedParameterNames.size(), preparedParameters.length);
 
         // reconstruct names
-        final var minedParameterNames = classVisitor.getMinedParameterNames();
-        final var baseIndex = Math.max(minedParameterNames.indexOf("this") + 1, 0);
-        final var minedParameterCount = Math.min(minedParameterNames.size(), preparedParameters.length);
+        final var baseIndex = Math.max(minedParameterNames.indexOf("this") + offsetThis, 0);
         for (int i = 0; i < minedParameterCount; i++)
             preparedParameters[i] = minedParameterNames.get(baseIndex + i);
     }

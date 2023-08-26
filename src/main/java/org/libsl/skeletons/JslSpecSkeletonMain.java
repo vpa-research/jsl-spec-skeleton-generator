@@ -6,7 +6,9 @@ import org.libsl.skeletons.rendering.InfoRendererIndirect;
 import org.libsl.skeletons.rendering.InfoRendererPrimary;
 import org.libsl.skeletons.sources.runtime.JslClassCache;
 import org.libsl.skeletons.summary.ClassSummary;
+import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzer;
+import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzerGeneric;
 import org.libsl.skeletons.util.PrettyPrinter;
 import org.objectweb.asm.ClassReader;
 
@@ -20,6 +22,9 @@ import java.util.function.Function;
  * class=java.util.Optional renderer=primary
  * class=java.util.Optional renderer=direct
  * class=java.util.Optional renderer=indirect
+ * <p>
+ * Preferred usage example:
+ * class=java.util.ArrayList$ListItr renderer=primary generics=false include-inherited=true
  */
 public final class JslSpecSkeletonMain {
     private final Properties props = new Properties();
@@ -69,16 +74,24 @@ public final class JslSpecSkeletonMain {
             case "reflection":
                 return canonicalName -> {
                     final var source = loadClassFromRuntime(canonicalName);
-                    final var classAnalyzer = new ReflectionClassAnalyzer(
-                            source,
-                            collectGenerics,
-                            includeInheritedMethods
-                    );
-                    return classAnalyzer.collectInfo();
+
+                    final ClassSummaryProducer analyzer;
+                    if (collectGenerics)
+                        analyzer = new ReflectionClassAnalyzerGeneric(
+                                source,
+                                includeInheritedMethods
+                        );
+                    else
+                        analyzer = new ReflectionClassAnalyzer(
+                                source,
+                                includeInheritedMethods
+                        );
+
+                    return analyzer.collectInfo();
                 };
 
             case "bytecode":
-                return null;
+                throw new Error("TODO");
 
             default:
                 throw new AssertionError("Unknown class data source: " + dataSource);

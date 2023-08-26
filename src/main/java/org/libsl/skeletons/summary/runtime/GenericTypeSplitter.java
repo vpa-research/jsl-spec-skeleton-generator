@@ -9,7 +9,7 @@ final class GenericTypeSplitter {
     private GenericTypeSplitter() {
     }
 
-    private static GenericTypeSummary splitParameterized(final ParameterizedType type) {
+    private static TypeSummary splitParameterized(final ParameterizedType type) {
         final var rawTypeName = type.getRawType().getTypeName();
         final var simpleType = JslClassCache.findClass(rawTypeName).getSimpleName();
 
@@ -17,48 +17,48 @@ final class GenericTypeSplitter {
         for (final var t : type.getActualTypeArguments())
             genericParameters.add(t.getTypeName());
 
-        return new GenericTypeSummary(simpleType, genericParameters);
+        return new TypeSummary(simpleType, genericParameters);
     }
 
-    private static GenericTypeSummary splitWildcard(final WildcardType type) {
+    private static TypeSummary splitWildcard(final WildcardType type) {
         throw new AssertionError("FIXME: Wildcard type encountered");
 
         /*this.typeStr = "~~~~~WildcardType";//type.getTypeName();
         this.genericParametersStr = "?";*/
     }
 
-    private static GenericTypeSummary splitTypeVariable(final TypeVariable<?> type) {
-        return new GenericTypeSummary(
+    private static TypeSummary splitTypeVariable(final TypeVariable<?> type) {
+        return new TypeSummary(
                 type.getName()
                 // FIXME: missing bounds
         );
     }
 
-    private static GenericTypeSummary splitGenericArray(final GenericArrayType type) {
-        return new GenericTypeSummary(
+    private static TypeSummary splitGenericArray(final GenericArrayType type) {
+        return new TypeSummary(
                 "array<" + type.getGenericComponentType().getTypeName() + ">"
         );
     }
 
-    private static GenericTypeSummary splitArray(final Class<?> type) {
-        return new GenericTypeSummary(
+    private static TypeSummary splitArray(final Class<?> type) {
+        return new TypeSummary(
                 "array<" + type.getComponentType().getSimpleName() + ">"
         );
     }
 
-    private static GenericTypeSummary splitClass(final Class<?> type) {
-        return new GenericTypeSummary(
+    private static TypeSummary splitClass(final Class<?> type) {
+        return new TypeSummary(
                 type.getSimpleName()
         );
     }
 
-    private static GenericTypeSummary splitPrimitive(final Class<?> type) {
-        return new GenericTypeSummary(
+    private static TypeSummary splitPrimitive(final Class<?> type) {
+        return new TypeSummary(
                 type.getName()
         );
     }
 
-    public static GenericTypeSummary split(final Type type) {
+    public static TypeSummary split(final Type type) {
         if (type instanceof WildcardType)
             return splitWildcard((WildcardType) type);
 

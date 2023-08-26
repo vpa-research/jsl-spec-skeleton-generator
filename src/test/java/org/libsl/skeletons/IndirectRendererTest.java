@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.libsl.skeletons.rendering.InfoRendererIndirect;
 import org.libsl.skeletons.sources.runtime.JslClassCache;
 import org.libsl.skeletons.summary.ClassSummary;
-import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzer;
+import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzerGeneric;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +36,7 @@ class IndirectRendererTest {
         final String targetSrc = TestUtils.loadExampleFile("skeletons/indirect/" + target + ".lsl");
         final Class<?> targetClass = JslClassCache.findClass(target);
 
-        final ClassSummary summary = new ReflectionClassAnalyzer(targetClass, true, false).collectInfo();
+        final ClassSummary summary = new ReflectionClassAnalyzerGeneric(targetClass, false).collectInfo();
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {

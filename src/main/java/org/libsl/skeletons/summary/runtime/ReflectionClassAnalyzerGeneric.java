@@ -8,22 +8,24 @@ import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.summary.bytecode.ParameterNameMiner;
 import org.libsl.skeletons.util.ReflectionUtils;
-import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.*;
 import sun.misc.Unsafe;
 
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
+public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProducer {
     private final Class<?> source;
     private final ClassSummary summary;
     private final boolean includeInheritedMethods;
     private final BytecodeLoader bytecodeLoader = new ResourceClassLoader();
     private final Map<String, ClassReader> classReaderCache = new HashMap<>();
 
-    public ReflectionClassAnalyzer(final Class<?> source,
-                                   final boolean includeInheritedMethods) {
+    public ReflectionClassAnalyzerGeneric(final Class<?> source,
+                                          final boolean includeInheritedMethods) {
         this.source = source;
         this.summary = new ClassSummary(source.getSimpleName(), source.getTypeName());
         this.includeInheritedMethods = includeInheritedMethods;
@@ -49,21 +51,38 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
                 n -> new ClassReader(bytecodeLoader.loadBytecodeFor(n)));
     }
 
+    private String genericsFilter(final String in) {
+        final var regex = Pattern.quote(source.getCanonicalName());
+        return in.replaceAll(regex, source.getSimpleName());
+    }
+
+    private Collection<String> genericsFilter(final Collection<String> in) {
+        return in.stream()
+                .map(this::genericsFilter)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     private void collectParameters(final MethodSummary method,
                                    final String[] parameterNames,
-                                   final Class<?>[] parameterTypes) {
-        if (parameterNames.length != parameterTypes.length)
+                                   final Type[] genericParameterTypes) {
+        if (parameterNames.length != genericParameterTypes.length)
             throw new AssertionError("Mismatching parameter sizes !!!");
 
         for (int i = 0; i < parameterNames.length; i++) {
             final var param = parameterNames[i];
-            final var type = parameterTypes[i];
+            final var type = genericParameterTypes[i];
 
             // parse the type of the parameter
-            final var paramSummary = TypeSplitter.split(type);
+            final var paramSummary = GenericTypeSplitter.split(type);
 
             // create a new "variable"
-            method.addParameter(param, paramSummary.simpleType);
+            final var paramVar = method.addParameter(param, paramSummary.simpleType);
+
+            // add annotations
+            if (paramSummary.hasTypeArguments) {
+                final var filteredStr = genericsFilter(paramSummary.typeArgs);
+                paramVar.annotations.add(Annotations.mkGeneric(filteredStr));
+            }
         }
     }
 
@@ -93,10 +112,17 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
                             ? declaringClass.getCanonicalName()
                             : null;
 
+            // generics in declaration
+            final var declarationParameters = c.getTypeParameters();
+            if (declarationParameters.length != 0) {
+                final var filteredStr = genericsFilter(declarationParamsToString(declarationParameters));
+                methodSummary.annotations.add(Annotations.mkGeneric(filteredStr));
+            }
+
             // throwable checked exceptions
-            final var exceptions = c.getExceptionTypes();
+            final var exceptions = c.getGenericExceptionTypes();
             if (exceptions.length != 0) {
-                final var filteredAnn = Annotations.mkThrows(exceptions);
+                final var filteredAnn = genericsFilter(Annotations.mkThrows(exceptions));
                 methodSummary.annotations.add(filteredAnn);
             }
 
@@ -108,7 +134,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             final var parameterNames = getParameterNames(
                     declaringClass, "<init>", jreDescriptor, c.getParameters());
 
-            collectParameters(methodSummary, parameterNames, c.getParameterTypes());
+            collectParameters(methodSummary, parameterNames, c.getGenericParameterTypes());
         }
     }
 
@@ -151,7 +177,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             final var signature = MethodSummary.getSignature(methodName, m.getParameterTypes());
             final var declaringClass = m.getDeclaringClass();
 
-            final var retTypeSummary = TypeSplitter.split(m.getReturnType());
+            final var retTypeSummary = GenericTypeSplitter.split(m.getGenericReturnType());
 
             final MethodSummary methodSummary;
             if (isStatic)
@@ -165,10 +191,23 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
                             ? declaringClass.getCanonicalName()
                             : null;
 
+            // generics in declaration
+            final var declarationParameters = m.getTypeParameters();
+            if (declarationParameters.length != 0) {
+                final var filteredStr = genericsFilter(declarationParamsToString(declarationParameters));
+                methodSummary.annotations.add(Annotations.mkGeneric(filteredStr));
+            }
+
+            // generics in return type
+            if (retTypeSummary.hasTypeArguments) {
+                final var filteredStr = genericsFilter(retTypeSummary.typeArgs);
+                methodSummary.annotations.add(Annotations.mkGenericResult(filteredStr));
+            }
+
             // throwable checked exceptions
-            final var exceptions = m.getExceptionTypes();
+            final var exceptions = m.getGenericExceptionTypes();
             if (exceptions.length != 0) {
-                final var filteredAnn = Annotations.mkThrows(exceptions);
+                final var filteredAnn = genericsFilter(Annotations.mkThrows(exceptions));
                 methodSummary.annotations.add(filteredAnn);
             }
 
@@ -177,11 +216,39 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
 
             // parameters
             final var jreDescriptor = ReflectionUtils.getSignature(m);
-            final var parameterNames = getParameterNames(
-                    declaringClass, methodName, jreDescriptor, m.getParameters());
-
-            collectParameters(methodSummary, parameterNames, m.getParameterTypes());
+            final var parameterNames = getParameterNames(declaringClass, methodName, jreDescriptor, m.getParameters());
+            collectParameters(methodSummary, parameterNames, m.getGenericParameterTypes());
         }
+    }
+
+    private static Collection<String> declarationParamsToString(final TypeVariable<?>[] params) {
+        final var result = new ArrayList<String>();
+
+        for (var tv : params) {
+            final var name = tv.getName();
+
+            // correct bounds extraction
+            final var ssj = new StringJoiner(" & ", " extends ", "");
+            var actualBounds = 0;
+            for (var t : tv.getBounds())
+                if (t != Object.class) {
+                    ssj.add(t.getTypeName());
+                    ++actualBounds;
+                }
+
+            final var suffix = actualBounds == 0 ? "" : ssj.toString();
+            result.add(name + suffix);
+        }
+
+        return Collections.unmodifiableCollection(result);
+    }
+
+    private void collectTypeVariables() {
+        new TypeVariableCollector(source, summary.allGenericTypeVariables)
+                .collectTypeParameters(
+                        ElementClassifier::isSuitableConstructor,
+                        ElementClassifier::isSuitablePublicMethod
+                );
     }
 
     private void collectSpecialConstants() {
@@ -191,20 +258,27 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
 
     @Override
     public ClassSummary collectInfo() {
+        // incoming generic parameters
+        final var declarationParameters = source.getTypeParameters();
+        if (declarationParameters.length != 0) {
+            final var filteredStr = genericsFilter(declarationParamsToString(declarationParameters));
+            summary.annotations.add(Annotations.mkGeneric(filteredStr));
+        }
+
         // special constants
         collectSpecialConstants();
 
         // parent info
-        final var parent = source.getSuperclass();
+        final var parent = source.getGenericSuperclass();
         if (parent != null && parent != Object.class) {
-            final String filteredAnn = Annotations.mkExtends(parent);
+            final String filteredAnn = genericsFilter(Annotations.mkExtends(parent));
             summary.annotations.add(filteredAnn);
         }
 
         // interfaces info
-        final var parentInterfaces = source.getInterfaces();
+        final var parentInterfaces = source.getGenericInterfaces();
         for (var i : parentInterfaces) {
-            final var filteredAnn = Annotations.mkImplements(i);
+            final var filteredAnn = genericsFilter(Annotations.mkImplements(i));
             summary.annotations.add(filteredAnn);
         }
 
@@ -213,6 +287,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
 
         // method information
         collectImportReferences();
+        collectTypeVariables();
         collectConstructorsInfo();
         collectMethodsInfo();
 
