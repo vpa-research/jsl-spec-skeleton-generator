@@ -23,8 +23,8 @@ import java.util.function.Function;
  * class=java.util.Optional renderer=direct
  * class=java.util.Optional renderer=indirect
  * <p>
- * Preferred usage example:
- * class=java.util.ArrayList$ListItr renderer=primary generics=false include-inherited=true
+ * Complete usage example:
+ * class=java.util.ArrayList$ListItr renderer=primary generics=false include-inherited=true data-source=reflection
  */
 public final class JslSpecSkeletonMain {
     private final Properties props = new Properties();
@@ -156,6 +156,7 @@ public final class JslSpecSkeletonMain {
         for (var arg : args)
             System.err.println("- " + arg);
         System.err.flush();
+        System.out.flush();
 
         new JslSpecSkeletonMain(args).run();
     }
