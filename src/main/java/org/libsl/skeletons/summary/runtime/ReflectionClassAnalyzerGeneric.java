@@ -87,7 +87,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
     }
 
     private void collectImportReferences() {
-        new ImportCollector(source, summary.imports)
+        new ImportCollector(source, summary.imports, includeInheritedMethods)
                 .findImports(
                         ElementClassifier::isSuitableConstructor,
                         ElementClassifier::isSuitablePublicMethod

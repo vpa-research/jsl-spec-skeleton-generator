@@ -8,6 +8,8 @@ library "std:???"
 // imports
 
 import "java-common.lsl";
+import "java/io/_interfaces.lsl";
+import "java/lang/_interfaces.lsl";
 import "java/util/_interfaces.lsl";
 
 import "list-actions.lsl";
