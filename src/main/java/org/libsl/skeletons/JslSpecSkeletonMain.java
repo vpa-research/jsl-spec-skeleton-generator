@@ -10,9 +10,7 @@ import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzer;
 import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzerGeneric;
 import org.libsl.skeletons.util.PrettyPrinter;
-import org.objectweb.asm.ClassReader;
 
-import java.io.IOException;
 import java.util.Properties;
 import java.util.function.Function;
 
@@ -109,19 +107,6 @@ public final class JslSpecSkeletonMain {
             System.exit(-1);
         }
         return target;
-    }
-
-    private static ClassReader loadClassFromResources(final String canonicalName) {
-        final var path = canonicalName.replace('.', '/').concat(".class");
-        final var loader = Object.class.getClassLoader();
-
-        try (final var res = loader.getResourceAsStream(path)) {
-            assert res != null;
-
-            return new ClassReader(res.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private AbstractInfoRenderer getRenderer(final ClassSummary summary) {
