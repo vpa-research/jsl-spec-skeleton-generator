@@ -24,10 +24,6 @@ final class ElementClassifier {
     public static boolean isSuitablePublicMethod(final Method m) {
         final var mods = m.getModifiers();
 
-        // skip methods that we can't overwrite
-        if (m.getDeclaringClass() == Object.class && Modifier.isFinal(mods))
-            return false;
-
         // Note: bridges are always synthetic
         return !m.isSynthetic() && Modifier.isPublic(mods);
     }
