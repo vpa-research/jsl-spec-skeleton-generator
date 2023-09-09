@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public final class ParameterNameMiner {
-    private static final String CONSTRUCTOR_NAME = "<init>";
+    public static final String CONSTRUCTOR_NAME = "<init>";
 
     private ParameterNameMiner() {
     }
@@ -76,11 +76,15 @@ public final class ParameterNameMiner {
         // process
         clazz.accept(classVisitor, 0);
         final var minedParameterNames = classVisitor.getMinedParameterNames();
-        final var minedParameterCount = Math.min(minedParameterNames.size(), preparedParameters.length);
+        final var minedParameterNamesMaxIndex = minedParameterNames.size();
+        final var minedParameterCount = Math.min(minedParameterNamesMaxIndex, preparedParameters.length);
 
         // reconstruct names
         final var baseIndex = Math.max(minedParameterNames.indexOf("this") + offsetThis, 0);
-        for (int i = 0; i < minedParameterCount; i++)
-            preparedParameters[i] = minedParameterNames.get(baseIndex + i);
+        for (int i = 0; i < minedParameterCount; i++) {
+            final var index = baseIndex + i;
+            if (index < minedParameterNamesMaxIndex)
+                preparedParameters[i] = minedParameterNames.get(index);
+        }
     }
 }

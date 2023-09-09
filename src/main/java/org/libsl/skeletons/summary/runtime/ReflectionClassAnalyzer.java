@@ -104,9 +104,9 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(c.getModifiers()));
 
             // parameters
-            final var jreDescriptor = ReflectionUtils.getSignature(c);
+            final var jreDescriptor = ReflectionUtils.getDescriptor(c);
             final var parameterNames = getParameterNames(
-                    declaringClass, "<init>", jreDescriptor, c.getParameters());
+                    declaringClass, ParameterNameMiner.CONSTRUCTOR_NAME, jreDescriptor, c.getParameters());
 
             collectParameters(methodSummary, parameterNames, c.getParameterTypes());
         }
@@ -137,7 +137,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     private void collectMethodsInfo() {
         final var methodList =
                 includeInheritedMethods
-                        ? source.getMethods()
+                        ? ReflectionUtils.getMethodsInherited(source, ElementClassifier::isSuitablePublicMethod)
                         : source.getDeclaredMethods();
 
         // public methods (including static ones)
@@ -152,6 +152,10 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             final var declaringClass = m.getDeclaringClass();
 
             final var retTypeSummary = TypeSplitter.split(m.getReturnType());
+
+            if (isStatic && summary.staticMethods.containsKey(signature)
+                    || summary.instanceMethods.containsKey(signature))
+                throw new RuntimeException("duplicate method: " + m);
 
             final MethodSummary methodSummary;
             if (isStatic)
@@ -176,7 +180,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(m.getModifiers()));
 
             // parameters
-            final var jreDescriptor = ReflectionUtils.getSignature(m);
+            final var jreDescriptor = ReflectionUtils.getDescriptor(m);
             final var parameterNames = getParameterNames(
                     declaringClass, methodName, jreDescriptor, m.getParameters());
 
@@ -197,7 +201,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
         // parent info
         final var parent = source.getSuperclass();
         if (parent != null && parent != Object.class) {
-            final String filteredAnn = Annotations.mkExtends(parent);
+            final var filteredAnn = Annotations.mkExtends(parent);
             summary.annotations.add(filteredAnn);
         }
 

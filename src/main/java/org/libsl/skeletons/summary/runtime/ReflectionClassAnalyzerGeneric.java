@@ -130,9 +130,9 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(c.getModifiers()));
 
             // parameters
-            final var jreDescriptor = ReflectionUtils.getSignature(c);
+            final var jreDescriptor = ReflectionUtils.getDescriptor(c);
             final var parameterNames = getParameterNames(
-                    declaringClass, "<init>", jreDescriptor, c.getParameters());
+                    declaringClass, ParameterNameMiner.CONSTRUCTOR_NAME, jreDescriptor, c.getParameters());
 
             collectParameters(methodSummary, parameterNames, c.getGenericParameterTypes());
         }
@@ -163,7 +163,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
     private void collectMethodsInfo() {
         final var methodList =
                 includeInheritedMethods
-                        ? source.getMethods()
+                        ? ReflectionUtils.getMethodsInherited(source, ElementClassifier::isSuitablePublicMethod)
                         : source.getDeclaredMethods();
 
         // public methods (including static ones)
@@ -215,7 +215,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(m.getModifiers()));
 
             // parameters
-            final var jreDescriptor = ReflectionUtils.getSignature(m);
+            final var jreDescriptor = ReflectionUtils.getDescriptor(m);
             final var parameterNames = getParameterNames(declaringClass, methodName, jreDescriptor, m.getParameters());
             collectParameters(methodSummary, parameterNames, m.getGenericParameterTypes());
         }
@@ -271,7 +271,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
         // parent info
         final var parent = source.getGenericSuperclass();
         if (parent != null && parent != Object.class) {
-            final String filteredAnn = genericsFilter(Annotations.mkExtends(parent));
+            final var filteredAnn = genericsFilter(Annotations.mkExtends(parent));
             summary.annotations.add(filteredAnn);
         }
 

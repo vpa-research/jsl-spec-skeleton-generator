@@ -4,25 +4,26 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.function.Predicate;
 
 import static org.libsl.skeletons.util.UnsafeUtils.unchecked;
 
 public final class ReflectionUtils {
-    private static final Map<Class<?>, String> PRIMITIVE_TO_SIGNATURE = new HashMap<Class<?>, String>(9);
+    private static final Map<Class<?>, String> PRIMITIVE_DESCRIPTORS;
 
     static {
-        PRIMITIVE_TO_SIGNATURE.put(byte.class, "B");
-        PRIMITIVE_TO_SIGNATURE.put(char.class, "C");
-        PRIMITIVE_TO_SIGNATURE.put(short.class, "S");
-        PRIMITIVE_TO_SIGNATURE.put(int.class, "I");
-        PRIMITIVE_TO_SIGNATURE.put(long.class, "J");
-        PRIMITIVE_TO_SIGNATURE.put(float.class, "F");
-        PRIMITIVE_TO_SIGNATURE.put(double.class, "D");
-        PRIMITIVE_TO_SIGNATURE.put(void.class, "V");
-        PRIMITIVE_TO_SIGNATURE.put(boolean.class, "Z");
+        PRIMITIVE_DESCRIPTORS = Map.of(
+                byte.class, "B",
+                char.class, "C",
+                short.class, "S",
+                int.class, "I",
+                long.class, "J",
+                float.class, "F",
+                double.class, "D",
+                void.class, "V",
+                boolean.class, "Z"
+        );
     }
 
     private ReflectionUtils() {
@@ -31,30 +32,30 @@ public final class ReflectionUtils {
     /**
      * Returns the internal name of {@code clazz} (also known as the descriptor).
      */
-    public static String getSignature(final Class<?> clazz) {
-        final var primitiveSignature = PRIMITIVE_TO_SIGNATURE.get(clazz);
+    public static String getDescriptor(final Class<?> clazz) {
+        final var primitiveSignature = PRIMITIVE_DESCRIPTORS.get(clazz);
         if (primitiveSignature != null)
             return primitiveSignature;
         else if (clazz.isArray())
-            return "[" + getSignature(clazz.getComponentType());
+            return "[" + getDescriptor(clazz.getComponentType());
         else
             return "L" + clazz.getName().replace('.', '/') + ";";
     }
 
-    public static String getSignature(final Method method) {
+    public static String getDescriptor(final Method method) {
         final var result = new StringJoiner("", "(", ")");
 
         for (var pType : method.getParameterTypes())
-            result.add(getSignature(pType));
+            result.add(getDescriptor(pType));
 
-        return result + getSignature(method.getReturnType());
+        return result + getDescriptor(method.getReturnType());
     }
 
-    public static String getSignature(final Constructor<?> constructor) {
+    public static String getDescriptor(final Constructor<?> constructor) {
         final var result = new StringJoiner("", "(", ")");
 
         for (var pType : constructor.getParameterTypes())
-            result.add(getSignature(pType));
+            result.add(getDescriptor(pType));
 
         return result + "V";
     }
@@ -87,6 +88,80 @@ public final class ReflectionUtils {
                 .walk(s -> s.skip(1).findFirst())
                 .orElseThrow()
                 .getDeclaringClass();
+    }
+
+    private static String getSignatureNoReturnType(final Method method) {
+        final var descriptor = getDescriptor(method);
+
+        final var bracketIndex = descriptor.indexOf(')');
+        final var name = method.getName();
+        final var parameters = descriptor.substring(0, bracketIndex + 1);
+
+        return name + parameters;
+    }
+
+    public static Method[] getMethodsInherited(final Class<?> origin,
+                                         final Predicate<Method> methodFilter) {
+        final var result = new HashMap<String, Method>();
+
+        final var visitedClasses = Collections.newSetFromMap(new IdentityHashMap<>());
+        final var queue = new ArrayDeque<Class<?>>();
+
+        // interfaces (regular methods)
+        final var originParent = origin.getSuperclass();
+        if (originParent != null)
+            Collections.addAll(queue, originParent.getInterfaces());
+        Collections.addAll(queue, origin.getInterfaces());
+
+        while (!queue.isEmpty()) {
+            final var clazz = queue.removeLast();
+
+            if (visitedClasses.contains(clazz))
+                continue;
+            visitedClasses.add(clazz);
+
+            for (var m : clazz.getDeclaredMethods()) {
+                final var mods = m.getModifiers();
+
+                if (!Modifier.isStatic(mods) && Modifier.isPublic(mods))
+                    result.put(getSignatureNoReturnType(m), m);
+            }
+
+            Collections.addAll(queue, clazz.getInterfaces());
+        }
+
+        // superclasses (regular methods)
+        queue.add(origin);
+        if (originParent != null)
+            queue.add(originParent);
+        while (!queue.isEmpty()) {
+            final var clazz = queue.removeLast();
+
+            if (visitedClasses.contains(clazz))
+                continue;
+            visitedClasses.add(clazz);
+
+            for (var m : clazz.getDeclaredMethods()) {
+                final var mods = m.getModifiers();
+
+                if (!Modifier.isStatic(mods) && methodFilter.test(m))
+                    result.put(getSignatureNoReturnType(m), m);
+            }
+
+            final var parentClass = clazz.getSuperclass();
+            if (parentClass != null)
+                queue.add(parentClass);
+        }
+
+        // static methods from the source class only! (cannot be overridden by subclasses)
+        for (var m : origin.getDeclaredMethods()) {
+            final var mods = m.getModifiers();
+
+            if (Modifier.isStatic(mods) && Modifier.isPublic(mods))
+                result.put(getSignatureNoReturnType(m), m);
+        }
+
+        return result.values().toArray(new Method[0]);
     }
 
     public static ReflectionAccessHelper debugFrom(final Object source) {

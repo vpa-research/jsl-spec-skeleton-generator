@@ -11,7 +11,10 @@ import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzer;
 import org.libsl.skeletons.summary.runtime.ReflectionClassAnalyzerGeneric;
 import org.libsl.skeletons.util.PrettyPrinter;
 
-import java.util.Properties;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.function.Function;
 
 /**
@@ -25,7 +28,23 @@ import java.util.function.Function;
  * class=java.util.ArrayList$ListItr renderer=primary generics=false include-inherited=true data-source=reflection
  */
 public final class JslSpecSkeletonMain {
-    private final Properties props = new Properties();
+    private static final Map<String, String> DEFAULTS;
+    public static final String PROP_CLASS_TARGET = "class";
+    public static final String PROP_GENERICS = "generics";
+    public static final String PROP_INCLUDE_INHERITED_METHODS = "include-inherited";
+    public static final String PROP_DATA_SOURCE = "data-source";
+    public static final String PROP_RENDERER = "renderer";
+
+    private final Map<String, String> props = new HashMap<>(DEFAULTS);
+
+    static {
+        DEFAULTS = Map.of(
+                PROP_GENERICS, "false",
+                PROP_INCLUDE_INHERITED_METHODS, "false",
+                PROP_DATA_SOURCE, "reflection",
+                PROP_RENDERER, "primary"
+        );
+    }
 
     public JslSpecSkeletonMain(final String[] cliArgs) {
         for (var arg : cliArgs) {
@@ -33,7 +52,16 @@ public final class JslSpecSkeletonMain {
             if (pair.length != 2)
                 throw new AssertionError("Expecting pairs of values but got '" + arg + "'");
 
-            props.setProperty(pair[0], pair[1]);
+            props.put(pair[0], pair[1]);
+        }
+    }
+
+    public void printConfiguration(final PrintStream out) {
+        for (var k : new TreeSet<>(props.keySet())) {
+            out.print("- ");
+            out.print(k);
+            out.print(" = ");
+            out.println(props.get(k));
         }
     }
 
@@ -48,7 +76,7 @@ public final class JslSpecSkeletonMain {
     }
 
     private String getTargetClass() {
-        final var target = props.getProperty("class");
+        final var target = props.get(PROP_CLASS_TARGET);
         if (target == null) {
             System.err.println(
                     "[!] Class have not been specified. " +
@@ -62,12 +90,12 @@ public final class JslSpecSkeletonMain {
 
     private Function<String, ClassSummary> getClassAnalyzer() {
         final var collectGenerics =
-                !"false".equalsIgnoreCase(props.getProperty("generics", "false"));
+                !"false".equalsIgnoreCase(props.get(PROP_GENERICS));
 
         final var includeInheritedMethods =
-                !"false".equalsIgnoreCase(props.getProperty("include-inherited", "false"));
+                !"false".equalsIgnoreCase(props.get(PROP_INCLUDE_INHERITED_METHODS));
 
-        final var dataSource = props.getProperty("data-source", "reflection");
+        final var dataSource = props.get(PROP_DATA_SOURCE);
         switch (dataSource) {
             case "reflection":
                 return canonicalName -> {
@@ -110,7 +138,7 @@ public final class JslSpecSkeletonMain {
     }
 
     private AbstractInfoRenderer getRenderer(final ClassSummary summary) {
-        final var renderer = props.getProperty("renderer", "primary");
+        final var renderer = props.get(PROP_RENDERER);
         final var printer = new PrettyPrinter();
 
         switch (renderer.toLowerCase()) {
@@ -143,6 +171,13 @@ public final class JslSpecSkeletonMain {
         System.err.flush();
         System.out.flush();
 
-        new JslSpecSkeletonMain(args).run();
+        final var m = new JslSpecSkeletonMain(args);
+
+        System.err.println("[i] Configuration:");
+        m.printConfiguration(System.err);
+        System.err.flush();
+        System.out.flush();
+
+        m.run();
     }
 }

@@ -18,13 +18,24 @@ final class ElementClassifier {
     }
 
     public static boolean isSuitableConstructor(final Constructor<?> c) {
-        return !c.isSynthetic();
+        final var mods = c.getModifiers();
+
+        if (c.isSynthetic())
+            return false;
+
+        return !Modifier.isAbstract(mods);
     }
 
     public static boolean isSuitablePublicMethod(final Method m) {
         final var mods = m.getModifiers();
 
+        if (Modifier.isAbstract(mods))
+            return false;
+
         // Note: bridges are always synthetic
-        return !m.isSynthetic() && Modifier.isPublic(mods);
+        if (m.isSynthetic())
+            return false;
+
+        return Modifier.isPublic(mods);
     }
 }
