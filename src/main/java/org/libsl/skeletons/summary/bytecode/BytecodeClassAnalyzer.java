@@ -22,8 +22,9 @@ public final class BytecodeClassAnalyzer implements ClassSummaryProducer {
 
         final var canonicalName = source.getClassName().replace('/', '.');
         final var simpleName = getSimpleName(canonicalName);
+        final var packageName = getPackageName(canonicalName, simpleName);
 
-        this.summary = new ClassSummary(simpleName, canonicalName);
+        this.summary = new ClassSummary(simpleName, packageName, canonicalName);
     }
 
     private static String getSimpleName(final String canonicalName) {
@@ -32,6 +33,11 @@ public final class BytecodeClassAnalyzer implements ClassSummaryProducer {
         return Arrays.stream(segments)
                 .dropWhile(s -> Character.isLowerCase(s.charAt(0)))
                 .collect(Collectors.joining("."));
+    }
+
+    private String getPackageName(final String canonicalName, final String simpleName) {
+        final var nameIndex = canonicalName.indexOf(simpleName);
+        return canonicalName.substring(0, nameIndex - 1);
     }
 
     private ClassReader getClass(final String name) {

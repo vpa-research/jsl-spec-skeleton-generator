@@ -4,6 +4,7 @@ import java.util.*;
 
 public final class ClassSummary {
     public final String simpleName;
+    public final String packageName;
     public final String typeName;
     public final Set<String> imports = new TreeSet<>();
     public final Set<String> annotations = new LinkedHashSet<>();
@@ -15,8 +16,9 @@ public final class ClassSummary {
 
     private final Map<String, Integer> overloadCounter = new HashMap<>();
 
-    public ClassSummary(final String name, final String typeName) {
+    public ClassSummary(final String name, final String packageName, final String typeName) {
         this.simpleName = name;
+        this.packageName = packageName;
         this.typeName = typeName;
     }
 

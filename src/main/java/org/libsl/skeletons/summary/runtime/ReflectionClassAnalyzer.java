@@ -25,7 +25,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     public ReflectionClassAnalyzer(final Class<?> source,
                                    final boolean includeInheritedMethods) {
         this.source = source;
-        this.summary = new ClassSummary(source.getSimpleName(), source.getTypeName());
+        this.summary = new ClassSummary(source.getSimpleName(), source.getPackageName(), source.getTypeName());
         this.includeInheritedMethods = includeInheritedMethods;
 
         suppressIllegalAccessWarning();

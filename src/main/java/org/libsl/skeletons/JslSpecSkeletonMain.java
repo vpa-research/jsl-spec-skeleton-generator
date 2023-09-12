@@ -1,9 +1,6 @@
 package org.libsl.skeletons;
 
-import org.libsl.skeletons.rendering.AbstractInfoRenderer;
-import org.libsl.skeletons.rendering.InfoRendererDirect;
-import org.libsl.skeletons.rendering.InfoRendererIndirect;
-import org.libsl.skeletons.rendering.InfoRendererPrimary;
+import org.libsl.skeletons.rendering.*;
 import org.libsl.skeletons.sources.runtime.JslClassCache;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.ClassSummaryProducer;
@@ -144,6 +141,9 @@ public final class JslSpecSkeletonMain {
         switch (renderer.toLowerCase()) {
             case "primary":
                 return new InfoRendererPrimary(summary, printer);
+
+            case "tests":
+                return new InfoRendererTests(summary, printer);
 
             case "indirect":
                 return new InfoRendererIndirect(summary, printer);
