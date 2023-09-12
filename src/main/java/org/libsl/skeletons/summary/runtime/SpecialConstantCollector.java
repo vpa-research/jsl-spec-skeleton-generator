@@ -10,30 +10,45 @@ import java.util.function.Predicate;
 
 final class SpecialConstantCollector {
     private static final List<String> SPECIAL_PRIVATE_CONSTANTS = List.of(
-            "serialVersionUID"
+            "serialVersionUID",
+            "serialPersistentFields"
     );
 
     private final Class<?> source;
     private final ClassSummary summary;
+    private final boolean useGenerics;
 
-    SpecialConstantCollector(final Class<?> source, final ClassSummary summary) {
+    SpecialConstantCollector(final Class<?> source, final ClassSummary summary, final boolean useGenerics) {
         this.source = source;
         this.summary = summary;
+        this.useGenerics = useGenerics;
     }
 
     private void collectSpecialConstant(final Field field) {
         try {
             final var name = field.getName();
-            final var type = field.getType().getSimpleName();
+            final var type = getFieldType(field);
             final var constant = summary.addSpecialConstant(name, type);
 
             final var mods = field.getModifiers();
             constant.annotations.addAll(Annotations.modifiersToAnnotations(mods));
 
             field.setAccessible(true);
-            constant.value = String.valueOf(field.get(null));
+            constant.value = getFieldValue(field);
         } catch (IllegalAccessException ignored) {
         }
+    }
+
+    private String getFieldType(final Field field) {
+        // TODO: generics
+        return TypeSplitter.split(field.getType()).simpleType;
+    }
+
+    private String getFieldValue(final Field field) throws IllegalAccessException {
+        if (field.getType().isArray())
+            return "[]";
+
+        return String.valueOf(field.get(null));
     }
 
     private void collectSpecialConstant(final String name) {

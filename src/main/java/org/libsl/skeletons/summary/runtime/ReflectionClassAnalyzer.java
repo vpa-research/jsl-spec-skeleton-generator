@@ -186,7 +186,7 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     }
 
     private void collectSpecialConstants() {
-        new SpecialConstantCollector(source, summary)
+        new SpecialConstantCollector(source, summary, false)
                 .findConstants(ElementClassifier::isSuitablePublicField);
     }
 

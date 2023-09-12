@@ -249,7 +249,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
     }
 
     private void collectSpecialConstants() {
-        new SpecialConstantCollector(source, summary)
+        new SpecialConstantCollector(source, summary, true)
                 .findConstants(ElementClassifier::isSuitablePublicField);
     }
 
