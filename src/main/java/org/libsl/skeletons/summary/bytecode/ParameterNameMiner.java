@@ -2,10 +2,7 @@ package org.libsl.skeletons.summary.bytecode;
 
 import org.objectweb.asm.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class ParameterNameMiner {
     public static final String CONSTRUCTOR_NAME = "<init>";
@@ -24,8 +21,8 @@ public final class ParameterNameMiner {
             this.expectedDescriptor = Objects.requireNonNull(methodDescriptor);
         }
 
-        public List<String> getMinedParameterNames() {
-            return Collections.unmodifiableList(methodMiner.minedParameterNames);
+        public List<String> getMinedParameterNames(final int expectedParameterCount) {
+            return Collections.unmodifiableList(methodMiner.getMinedParameterNames(expectedParameterCount));
         }
 
         @Override
@@ -41,7 +38,8 @@ public final class ParameterNameMiner {
     }
 
     private static final class MethodMiner extends MethodVisitor {
-        public final List<String> minedParameterNames = new ArrayList<>();
+        private final List<String> minedParameters = new ArrayList<>();
+        private final Map<Integer, String> minedLocalVariables = new HashMap<>();
 
         private MethodMiner() {
             super(Opcodes.ASM9);
@@ -49,7 +47,7 @@ public final class ParameterNameMiner {
 
         @Override
         public void visitParameter(final String name, final int access) {
-            minedParameterNames.add(name);
+            minedParameters.add(name);
         }
 
         @Override
@@ -59,7 +57,27 @@ public final class ParameterNameMiner {
                                        final Label start,
                                        final Label end,
                                        final int index) {
-            minedParameterNames.add(name);
+            minedLocalVariables.put(index, name);
+        }
+
+        public List<String> getMinedParameterNames(final int expectedParameterCount) {
+            final var res = new String[expectedParameterCount];
+
+            // first estimation from local variables
+            for (var e : minedLocalVariables.entrySet()) {
+                final var index = e.getKey();
+                final var name = e.getValue();
+
+                if (index < expectedParameterCount)
+                    res[index] = name;
+            }
+
+            // second (accurate) estimation from actual parameters
+            final var pCount = Math.min(minedParameters.size(), res.length);
+            for (int i = 0; i < pCount; i++)
+                res[i] = minedParameters.get(i);
+
+            return Arrays.asList(res);
         }
     }
 
@@ -69,13 +87,14 @@ public final class ParameterNameMiner {
                                           final String methodDescriptor,
                                           final String[] preparedParameters) {
         // prepare
+        final var expectedParameterCount = preparedParameters.length + 1;
         final var classVisitor = new ClassMiner(methodName, methodDescriptor);
         final var isConstructor = CONSTRUCTOR_NAME.equals(methodName);
         final var offsetThis = isConstructor && !isIndependentClass ? 0 : 1;
 
         // process
         clazz.accept(classVisitor, 0);
-        final var minedParameterNames = classVisitor.getMinedParameterNames();
+        final var minedParameterNames = classVisitor.getMinedParameterNames(expectedParameterCount);
         final var minedParameterNamesMaxIndex = minedParameterNames.size();
         final var minedParameterCount = Math.min(minedParameterNamesMaxIndex, preparedParameters.length);
 
