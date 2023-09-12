@@ -1,15 +1,10 @@
 package org.libsl.skeletons.rendering;
 
 import org.libsl.skeletons.summary.ClassSummary;
-import org.libsl.skeletons.summary.KeywordFilter;
 import org.libsl.skeletons.summary.MethodSummary;
-import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.*;
-import java.util.function.Predicate;
-
-import static org.libsl.skeletons.summary.Annotations.*;
 
 public final class InfoRendererTests extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "test_";
