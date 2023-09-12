@@ -14,6 +14,7 @@ import static org.libsl.skeletons.summary.Annotations.*;
 public final class InfoRendererTests extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "test_";
     private static final String DEFAULT_BODY = "return -1;";
+    private static final String TARGET_PACKAGE_PREFIX = "tests";
 
     private final ClassSummary summary;
     private final String outputClassName;
@@ -76,7 +77,10 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     }
 
     private void renderPreamble() {
-        out.addln("package ???.%s;", summary.packageName);
+        out.addln("package %s.%s;", TARGET_PACKAGE_PREFIX, summary.packageName);
+        out.addln();
+
+        out.addln("import %s.%s;", summary.packageName, summary.simpleName);
         out.addln();
     }
 
