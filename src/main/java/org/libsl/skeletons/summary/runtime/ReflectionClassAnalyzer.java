@@ -136,17 +136,14 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
 
     private void collectMethodsInfo() {
         final var methodList =
-                includeInheritedMethods
+                includeInheritedMethods && source != Object.class
                         ? ReflectionUtils.getMethodsInherited(source, ElementClassifier::isSuitablePublicMethod)
-                        : source.getDeclaredMethods();
+                        : ReflectionUtils.getMethodsDirect(source, ElementClassifier::isSuitablePublicMethodWithObject);
 
         // public methods (including static ones)
         for (var m : methodList) {
-            final var mods = m.getModifiers();
-            if (!ElementClassifier.isSuitablePublicMethod(m))
-                continue;
-
             final var methodName = m.getName();
+            final var mods = m.getModifiers();
             final var isStatic = Modifier.isStatic(mods);
             final var signature = MethodSummary.getSignature(methodName, m.getParameterTypes());
             final var declaringClass = m.getDeclaringClass();

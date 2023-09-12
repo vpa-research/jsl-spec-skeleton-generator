@@ -100,8 +100,19 @@ public final class ReflectionUtils {
         return name + parameters;
     }
 
+    public static Method[] getMethodsDirect(final Class<?> origin,
+                                            final Predicate<Method> methodFilter) {
+        final var result = new ArrayList<Method>();
+
+        for (var m : origin.getDeclaredMethods())
+            if (methodFilter.test(m))
+                result.add(m);
+
+        return result.toArray(new Method[0]);
+    }
+
     public static Method[] getMethodsInherited(final Class<?> origin,
-                                         final Predicate<Method> methodFilter) {
+                                               final Predicate<Method> methodFilter) {
         final var result = new HashMap<String, Method>();
 
         final var visitedClasses = Collections.newSetFromMap(new IdentityHashMap<>());

@@ -27,6 +27,11 @@ final class ElementClassifier {
     }
 
     public static boolean isSuitablePublicMethod(final Method m) {
+        return isSuitablePublicMethodWithObject(m)
+                && m.getDeclaringClass() != Object.class;
+    }
+
+    public static boolean isSuitablePublicMethodWithObject(final Method m) {
         final var mods = m.getModifiers();
 
         if (Modifier.isAbstract(mods))
