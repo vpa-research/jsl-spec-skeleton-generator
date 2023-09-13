@@ -3,6 +3,7 @@ package org.libsl.skeletons.summary.bytecode;
 import org.objectweb.asm.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class ParameterNameMiner {
     public static final String CONSTRUCTOR_NAME = "<init>";
@@ -77,7 +78,9 @@ public final class ParameterNameMiner {
             for (int i = 0; i < pCount; i++)
                 res[i] = minedParameters.get(i);
 
-            return Arrays.asList(res);
+            return Arrays.stream(res)
+                    .takeWhile(Objects::nonNull)
+                    .collect(Collectors.toUnmodifiableList());
         }
     }
 

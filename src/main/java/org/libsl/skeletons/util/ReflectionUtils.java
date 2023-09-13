@@ -115,6 +115,9 @@ public final class ReflectionUtils {
                                                final Predicate<Method> methodFilter) {
         final var result = new HashMap<String, Method>();
 
+        final var originMods = origin.getModifiers();
+        final var collectInterfaceMethods = Modifier.isInterface(originMods) || Modifier.isAbstract(originMods);
+
         final var visitedClasses = Collections.newSetFromMap(new IdentityHashMap<>());
         final var queue = new ArrayDeque<Class<?>>();
 
@@ -133,6 +136,9 @@ public final class ReflectionUtils {
 
             for (var m : clazz.getDeclaredMethods()) {
                 final var mods = m.getModifiers();
+
+                if (Modifier.isAbstract(mods) && !collectInterfaceMethods)
+                    continue;
 
                 if (!Modifier.isStatic(mods) && Modifier.isPublic(mods))
                     result.put(getSignatureNoReturnType(m), m);
