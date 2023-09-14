@@ -78,9 +78,7 @@ public final class ParameterNameMiner {
             for (int i = 0; i < pCount; i++)
                 res[i] = minedParameters.get(i);
 
-            return Arrays.stream(res)
-                    .takeWhile(Objects::nonNull)
-                    .collect(Collectors.toUnmodifiableList());
+            return Arrays.asList(res);
         }
     }
 
@@ -105,8 +103,11 @@ public final class ParameterNameMiner {
         final var baseIndex = Math.max(minedParameterNames.indexOf("this") + offsetThis, 0);
         for (int i = 0; i < minedParameterCount; i++) {
             final var index = baseIndex + i;
-            if (index < minedParameterNamesMaxIndex)
-                preparedParameters[i] = minedParameterNames.get(index);
+            if (index < minedParameterNamesMaxIndex) {
+                final var suggestedName = minedParameterNames.get(index);
+                if (suggestedName != null)
+                    preparedParameters[i] = suggestedName;
+            }
         }
     }
 }
