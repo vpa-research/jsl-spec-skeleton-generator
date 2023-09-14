@@ -175,6 +175,8 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
 
             // special modifiers
             methodSummary.annotations.addAll(Annotations.modifiersToAnnotations(m.getModifiers()));
+            if (m.isDefault())
+                methodSummary.annotations.add(Annotations.DEFAULT);
 
             // parameters
             final var jreDescriptor = ReflectionUtils.getDescriptor(m);

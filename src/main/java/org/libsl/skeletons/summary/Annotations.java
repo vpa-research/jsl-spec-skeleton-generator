@@ -20,12 +20,13 @@ public final class Annotations {
     public static final String VOLATILE = "@volatile";
     public static final String STRICT = "@strict";
     public static final String VARARGS = "@varargs";
+    public static final String DEFAULT = "@default";
 
     public static final Collection<String> INLINE_ANNOTATIONS = Set.of(
             PUBLIC, PROTECTED, PRIVATE,
             FINAL, STATIC,
             SYNCHRONIZED, VOLATILE,
-            STRICT, VARARGS
+            STRICT, VARARGS, DEFAULT
     );
 
     public static final String THROWS_PREFIX = "@throws";
