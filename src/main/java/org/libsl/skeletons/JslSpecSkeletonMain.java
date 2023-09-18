@@ -31,6 +31,7 @@ public final class JslSpecSkeletonMain {
     public static final String PROP_INCLUDE_INHERITED_METHODS = "include-inherited";
     public static final String PROP_DATA_SOURCE = "data-source";
     public static final String PROP_RENDERER = "renderer";
+    public static final String PROP_TYPE_NAME_OVERRIDE = "type-override";
 
     private final Map<String, String> props = new HashMap<>(DEFAULTS);
 
@@ -91,6 +92,8 @@ public final class JslSpecSkeletonMain {
 
         final var includeInheritedMethods =
                 !"false".equalsIgnoreCase(props.get(PROP_INCLUDE_INHERITED_METHODS));
+
+        final var nameOverride = props.get(PROP_TYPE_NAME_OVERRIDE);
 
         final var dataSource = props.get(PROP_DATA_SOURCE);
         switch (dataSource) {
