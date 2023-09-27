@@ -12,6 +12,7 @@ public final class KeywordFilter {
             "fun", "proc",
             "is", "has", "as",
             "this", "self", "target",
+            "var", "val",
     });
 
     private KeywordFilter() {
