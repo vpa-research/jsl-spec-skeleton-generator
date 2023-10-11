@@ -8,9 +8,14 @@ library "std:???"
 // imports
 
 import "java-common.lsl";
-import "java/lang/_interfaces.lsl";
-import "java/util/function/_interfaces.lsl";
-import "java/util/stream/_interfaces.lsl";
+import "java/lang/Object.lsl";
+import "java/lang/Runnable.lsl";
+import "java/lang/String.lsl";
+import "java/util/function/Consumer.lsl";
+import "java/util/function/Function.lsl";
+import "java/util/function/Predicate.lsl";
+import "java/util/function/Supplier.lsl";
+import "java/util/stream/Stream.lsl";
 
 import "list-actions.lsl";
 

@@ -8,10 +8,16 @@ library "std:???"
 // imports
 
 import "java-common.lsl";
-import "java/io/_interfaces.lsl";
-import "java/lang/_interfaces.lsl";
-import "java/util/_interfaces.lsl";
-import "java/util/function/_interfaces.lsl";
+import "java/io/Serializable.lsl";
+import "java/lang/Cloneable.lsl";
+import "java/lang/Object.lsl";
+import "java/util/AbstractMap.lsl";
+import "java/util/Collection.lsl";
+import "java/util/Map.lsl";
+import "java/util/Set.lsl";
+import "java/util/function/BiConsumer.lsl";
+import "java/util/function/BiFunction.lsl";
+import "java/util/function/Function.lsl";
 
 import "list-actions.lsl";
 

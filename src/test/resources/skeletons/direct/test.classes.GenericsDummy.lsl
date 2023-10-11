@@ -8,8 +8,11 @@ library "std:???"
 // imports
 
 import "java-common.lsl";
-import "java/lang/_interfaces.lsl";
-import "java/util/function/_interfaces.lsl";
+import "java/lang/Class.lsl";
+import "java/lang/Iterable.lsl";
+import "java/lang/Object.lsl";
+import "java/lang/Runnable.lsl";
+import "java/util/function/BiConsumer.lsl";
 
 import "list-actions.lsl";
 
