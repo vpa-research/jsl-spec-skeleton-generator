@@ -177,13 +177,10 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
     }
 
     private void renderImports() {
-        out.add(IMPORT).addln(" java.common;");
-
         for (var ref : summary.imports) {
             final var path = ref.replace('.', '/');
             out.add(IMPORT).add(" ").add(path).addln(";");
         }
-
         out.addln();
     }
 

@@ -4,17 +4,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Predicate;
 
 final class ImportCollector {
-    private static final String INTERFACES_FILE = "_interfaces";
-    private static final Set<Class<?>> IGNORE = Set.of(
-            Object.class,
-            Class.class,
-            String.class
-    );
-
     private final Class<?> source;
     private final Collection<String> outImportReferences;
     private final boolean includeInheritedMethods;
@@ -25,15 +17,21 @@ final class ImportCollector {
         this.source = source;
         this.outImportReferences = outImportReferences;
         this.includeInheritedMethods = includeInheritedMethods;
+
+        this.outImportReferences.add(Object.class.getCanonicalName());
     }
 
     private void visitType(final Class<?> t) {
         // WARNING: public inner classes and interfaces are expecting to be declared in the enclosing one
-        if (t == null || t.isPrimitive() || t == source || IGNORE.contains(t) || t.isMemberClass())
+        if (t == null || t.isPrimitive() || t == source)
             return;
 
-        if (t.isInterface() || Modifier.isAbstract(t.getModifiers()))
-            outImportReferences.add(t.getPackageName() + "." + INTERFACES_FILE);
+        final var mods = t.getModifiers();
+        if (!Modifier.isPublic(mods) || t.isMemberClass())
+            return;
+
+        if (t.isArray())
+            visitType(t.getComponentType());
         else
             outImportReferences.add(t.getCanonicalName());
     }
