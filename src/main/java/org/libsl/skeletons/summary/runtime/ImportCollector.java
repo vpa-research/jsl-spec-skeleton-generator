@@ -22,10 +22,10 @@ final class ImportCollector {
     }
 
     private void visitType(final Class<?> t) {
-        // WARNING: public inner classes and interfaces are expecting to be declared in the enclosing one
-        if (t == null || t.isPrimitive() || t == source)
+        if (t == null || t == source || t.isPrimitive())
             return;
 
+        // WARNING: public inner classes and interfaces are expecting to be declared in the enclosing one
         final var mods = t.getModifiers();
         if (!Modifier.isPublic(mods) || t.isMemberClass())
             return;
