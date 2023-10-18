@@ -3,7 +3,6 @@ package org.libsl.skeletons.summary.bytecode;
 import org.objectweb.asm.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class ParameterNameMiner {
     public static final String CONSTRUCTOR_NAME = "<init>";
@@ -40,7 +39,8 @@ public final class ParameterNameMiner {
 
     private static final class MethodMiner extends MethodVisitor {
         private final List<String> minedParameters = new ArrayList<>();
-        private final Map<Integer, String> minedLocalVariables = new HashMap<>();
+        private final Map<Integer, String> minedLocalVariables = new TreeMap<>();
+        private final Map<String, Label> localVariableLabelMap = new IdentityHashMap<>();
 
         private MethodMiner() {
             super(Opcodes.ASM9);
@@ -58,27 +58,37 @@ public final class ParameterNameMiner {
                                        final Label start,
                                        final Label end,
                                        final int index) {
+            localVariableLabelMap.put(name, start);
             minedLocalVariables.put(index, name);
         }
 
         public List<String> getMinedParameterNames(final int expectedParameterCount) {
-            final var res = new String[expectedParameterCount];
+            final var res = new ArrayList<String>(expectedParameterCount);
 
-            // first estimation from local variables
-            for (var e : minedLocalVariables.entrySet()) {
-                final var index = e.getKey();
-                final var name = e.getValue();
+            // first estimate from actual parameters if any
+            final var paramsIter = minedParameters.iterator();
+            while (res.size() < expectedParameterCount && paramsIter.hasNext())
+                res.add(paramsIter.next());
 
-                if (index < expectedParameterCount)
-                    res[index] = name;
+            // then pull from local variables
+            final var localsIter = minedLocalVariables.values().iterator();
+            while (res.size() < expectedParameterCount && localsIter.hasNext()) {
+                final var variableName = localsIter.next();
+
+                if (!res.contains(variableName) && isParameter(variableName))
+                    res.add(variableName);
             }
 
-            // second (accurate) estimation from actual parameters
-            final var pCount = Math.min(minedParameters.size(), res.length);
-            for (int i = 0; i < pCount; i++)
-                res[i] = minedParameters.get(i);
+            // seal
+            return List.copyOf(res);
+        }
 
-            return Arrays.asList(res);
+        private boolean isParameter(final String variableName) {
+            try {
+                return localVariableLabelMap.get(variableName).getOffset() == 0;
+            } catch (IllegalStateException e) {
+                return true;
+            }
         }
     }
 
@@ -88,7 +98,7 @@ public final class ParameterNameMiner {
                                           final String methodDescriptor,
                                           final String[] preparedParameters) {
         // prepare
-        final var expectedParameterCount = preparedParameters.length + 1;
+        final var expectedParameterCount = preparedParameters.length + 1 /* "this" */;
         final var classVisitor = new ClassMiner(methodName, methodDescriptor);
         final var isConstructor = CONSTRUCTOR_NAME.equals(methodName);
         final var offsetThis = isConstructor && !isIndependentClass ? 0 : 1;
