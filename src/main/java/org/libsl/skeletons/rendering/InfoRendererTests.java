@@ -9,7 +9,7 @@ import java.util.*;
 public final class InfoRendererTests extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "test_";
     private static final String DEFAULT_BODY = "return -1;";
-    private static final String TARGET_PACKAGE_PREFIX = "tests";
+    private static final String TARGET_PACKAGE_PREFIX = "approximations";
 
     private final ClassSummary summary;
     private final String outputClassName;
