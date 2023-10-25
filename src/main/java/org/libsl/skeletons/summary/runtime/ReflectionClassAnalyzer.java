@@ -9,7 +9,6 @@ import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.summary.bytecode.ParameterNameMiner;
 import org.libsl.skeletons.util.ReflectionUtils;
 import org.objectweb.asm.ClassReader;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -25,23 +24,16 @@ public final class ReflectionClassAnalyzer implements ClassSummaryProducer {
     public ReflectionClassAnalyzer(final Class<?> source,
                                    final boolean includeInheritedMethods) {
         this.source = source;
-        this.summary = new ClassSummary(source.getSimpleName(), source.getPackageName(), source.getTypeName());
+        this.summary = new ClassSummary(
+                source.getSimpleName(),
+                source.getPackageName(),
+                source.getTypeName(),
+                Modifier.isAbstract(source.getModifiers()),
+                source.isInterface()
+        );
         this.includeInheritedMethods = includeInheritedMethods;
 
-        suppressIllegalAccessWarning();
-    }
-
-    private static void suppressIllegalAccessWarning() {
-        try {
-            final var theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-            theUnsafe.setAccessible(true);
-            final var u = (Unsafe) theUnsafe.get(null);
-
-            final var cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
-            final var logger = cls.getDeclaredField("logger");
-            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
-        } catch (Exception ignore) {
-        }
+        ReflectionUtils.suppressIllegalAccessWarning();
     }
 
     private ClassReader getClassFromBytecode(final String name) {

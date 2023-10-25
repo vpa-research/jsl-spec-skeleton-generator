@@ -13,13 +13,21 @@ public final class ClassSummary {
     public final Map<String, MethodSummary> instanceMethods = new TreeMap<>();
     public final Map<String, VariableSummary> specialConstants = new TreeMap<>();
     public final Collection<String> allGenericTypeVariables = new TreeSet<>();
+    public final boolean isAbstract;
+    public final boolean isInterface;
 
     private final Map<String, Integer> overloadCounter = new HashMap<>();
 
-    public ClassSummary(final String name, final String packageName, final String typeName) {
+    public ClassSummary(final String name,
+                        final String packageName,
+                        final String typeName,
+                        final boolean isAbstract,
+                        final boolean isInterface) {
         this.simpleName = name;
         this.packageName = packageName;
         this.typeName = typeName;
+        this.isAbstract = isAbstract;
+        this.isInterface = isInterface;
     }
 
     private void countMethodOverload(final String methodName) {

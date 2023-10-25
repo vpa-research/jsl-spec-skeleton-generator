@@ -1,9 +1,6 @@
 package org.libsl.skeletons.rendering;
 
-import org.libsl.skeletons.summary.ClassSummary;
-import org.libsl.skeletons.summary.KeywordFilter;
-import org.libsl.skeletons.summary.MethodSummary;
-import org.libsl.skeletons.summary.VariableSummary;
+import org.libsl.skeletons.summary.*;
 import org.libsl.skeletons.util.PrettyPrinter;
 
 import java.util.Collection;
@@ -160,6 +157,11 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
         out.addln();
 
         renderClassTypeAnnotations();
+
+        if (summary.isInterface)
+            out.add(Annotations.INTERFACE).add(" ");
+        else if (summary.isAbstract)
+            out.add(Annotations.ABSTRACT).add(" ");
 
         out.add("type ").add(summary.simpleName).addln();
         out.beginBlock();

@@ -1,5 +1,7 @@
 package org.libsl.skeletons.util;
 
+import sun.misc.Unsafe;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -58,6 +60,19 @@ public final class ReflectionUtils {
             result.add(getDescriptor(pType));
 
         return result + "V";
+    }
+
+    public static void suppressIllegalAccessWarning() {
+        try {
+            final var theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            final var u = (Unsafe) theUnsafe.get(null);
+
+            final var cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
+            final var logger = cls.getDeclaredField("logger");
+            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
+        } catch (Exception ignore) {
+        }
     }
 
     // https://stackoverflow.com/a/52335318

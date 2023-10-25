@@ -4,6 +4,7 @@ import org.libsl.skeletons.sources.bytecode.BytecodeLoader;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +25,18 @@ public final class BytecodeClassAnalyzer implements ClassSummaryProducer {
         final var simpleName = getSimpleName(canonicalName);
         final var packageName = getPackageName(canonicalName, simpleName);
 
-        this.summary = new ClassSummary(simpleName, packageName, canonicalName);
+        final var flags = source.getAccess();
+        this.summary = new ClassSummary(
+                simpleName,
+                packageName,
+                canonicalName,
+                hasFlag(flags, Opcodes.ACC_ABSTRACT),
+                hasFlag(flags, Opcodes.ACC_INTERFACE)
+        );
+    }
+
+    private static boolean hasFlag(final int flags, final int flag) {
+        return (flags & flag) == flag;
     }
 
     private static String getSimpleName(final String canonicalName) {

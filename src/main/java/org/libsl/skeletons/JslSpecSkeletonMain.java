@@ -38,7 +38,7 @@ public final class JslSpecSkeletonMain {
     static {
         DEFAULTS = Map.of(
                 PROP_GENERICS, "false",
-                PROP_INCLUDE_INHERITED_METHODS, "false",
+                PROP_INCLUDE_INHERITED_METHODS, "true",
                 PROP_DATA_SOURCE, "reflection",
                 PROP_RENDERER, "primary"
         );

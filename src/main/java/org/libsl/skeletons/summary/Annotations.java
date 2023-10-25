@@ -37,6 +37,9 @@ public final class Annotations {
 
     public static final String TARGET = "@target";
 
+    public static final String INTERFACE = "@interface";
+    public static final String ABSTRACT = "@abstract";
+
     public static Collection<String> modifiersToAnnotations(final int mods) {
         final var list = new ArrayList<String>();
 
