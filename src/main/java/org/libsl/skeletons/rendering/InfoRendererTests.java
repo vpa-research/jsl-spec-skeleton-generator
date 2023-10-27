@@ -27,8 +27,13 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         out.addln();
         out.addln();
 
-        // potential origin reference
-        out.addln("// %s::%s", automatonName, method.signature);
+        // origin reference as JavaDoc
+        out.addln(
+                "/**\n * {@link %s.%s#%s}\n */",
+                summary.packageName,
+                summary.simpleName,
+                getMethodJavaDocSignature(method)
+        );
 
         // modifiers
         out.add("public static ");
@@ -53,6 +58,15 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         out.addln("}");
     }
 
+    private String getMethodJavaDocSignature(final MethodSummary method) {
+        final var sj = new StringJoiner(", ", "(", ")");
+
+        for (var par : method.parameters.values())
+            sj.add(par.simpleType);
+
+        return method.simpleName + sj;
+    }
+
     private String getUniqueSuffix(final MethodSummary method) {
         final var uuid = nextUUID.compute(method.simpleName, (m, id) -> id != null ? id + 1 : 0);
         return uuid.toString();
@@ -74,6 +88,12 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     private void renderPreamble() {
         out.addln("package %s.%s;", TARGET_PACKAGE_PREFIX, summary.packageName);
         out.addln();
+
+        if (!summary.imports.isEmpty()) {
+            for (var type : summary.imports)
+                out.addln("import %s;", type);
+            out.addln();
+        }
 
         out.addln("import %s.%s;", summary.packageName, summary.simpleName);
         out.addln();
