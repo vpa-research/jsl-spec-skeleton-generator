@@ -7,20 +7,22 @@ import org.libsl.skeletons.util.PrettyPrinter;
 import java.util.*;
 
 public final class InfoRendererTests extends AbstractInfoRenderer {
-    private static final String METHOD_NAME_PREFIX = "test_";
-    private static final String DEFAULT_BODY = "return -1;";
     private static final String TARGET_PACKAGE_PREFIX = "approximations";
+    private static final String ANNOTATION_PACKAGE = TARGET_PACKAGE_PREFIX;
+    private static final String ANNOTATION_NAME = "Test";
+    private static final String CLASS_PREFIX = "_Tests";
+    private static final String METHOD_NAME_PREFIX = "test_";
+    private static final String METHOD_RETURN_TYPE = "int";
+    private static final String METHOD_BODY = "return -1;";
 
     private final ClassSummary summary;
     private final String outputClassName;
-    private final String automatonName;
     private final Map<String, Integer> nextUUID = new IdentityHashMap<>();
 
     public InfoRendererTests(final ClassSummary summary, final PrettyPrinter out) {
         super(out);
         this.summary = summary;
-        this.automatonName = summary.simpleName + "Automaton";
-        this.outputClassName = summary.simpleName + "_Tests";
+        this.outputClassName = summary.simpleName + CLASS_PREFIX;
     }
 
     private void renderMethod(final MethodSummary method) {
@@ -35,11 +37,14 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
                 getMethodJavaDocSignature(method)
         );
 
+        // annotation for signaling/configuration
+        out.addln("@%s", ANNOTATION_NAME);
+
         // modifiers
         out.add("public static ");
 
         // return value type
-        out.add("%s ", "int");
+        out.add(METHOD_RETURN_TYPE).add(" ");
 
         // keyword + name
         final var fullMethodName = METHOD_NAME_PREFIX + method.simpleName + "_" + getUniqueSuffix(method);
@@ -52,7 +57,7 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         out.addln("{");
         out.beginBlock();
 
-        out.addln(DEFAULT_BODY);
+        out.addln(METHOD_BODY);
 
         out.endBlock();
         out.addln("}");
@@ -82,11 +87,15 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     }
 
     private void renderClassHeader() {
+        out.addln("@%s", ANNOTATION_NAME);
         out.add("public final class %s ", outputClassName);
     }
 
     private void renderPreamble() {
         out.addln("package %s.%s;", TARGET_PACKAGE_PREFIX, summary.packageName);
+        out.addln();
+
+        out.addln("import %s.%s;", ANNOTATION_PACKAGE, ANNOTATION_NAME);
         out.addln();
 
         if (!summary.imports.isEmpty()) {
