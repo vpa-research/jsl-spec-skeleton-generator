@@ -14,6 +14,7 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "test_";
     private static final String METHOD_RETURN_TYPE = "int";
     private static final String METHOD_BODY = "return -1;";
+    private static final String WARNING_SUPPRESSION = "SuppressWarnings({\"unused\"})";
 
     private final ClassSummary summary;
     private final String outputClassName;
@@ -38,7 +39,7 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         );
 
         // annotation for signaling/configuration
-        out.addln("@%s", ANNOTATION_NAME);
+        out.add("@").addln(ANNOTATION_NAME);
 
         // modifiers
         out.add("public static ");
@@ -87,7 +88,8 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     }
 
     private void renderClassHeader() {
-        out.addln("@%s", ANNOTATION_NAME);
+        out.add("@").add(ANNOTATION_NAME);
+        out.add("@").add(WARNING_SUPPRESSION);
         out.add("public final class %s ", outputClassName);
     }
 
