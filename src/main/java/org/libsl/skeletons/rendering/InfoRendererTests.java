@@ -1,5 +1,6 @@
 package org.libsl.skeletons.rendering;
 
+import org.libsl.skeletons.summary.Annotations;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
@@ -27,6 +28,11 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     }
 
     private void renderMethod(final MethodSummary method) {
+        // skipping inaccessible methods
+        if (method.annotations.contains(Annotations.PRIVATE) ||
+                method.annotations.contains(Annotations.PROTECTED))
+            return;
+
         out.addln();
         out.addln();
 
