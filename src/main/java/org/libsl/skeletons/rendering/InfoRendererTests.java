@@ -68,9 +68,19 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         final var sj = new StringJoiner(", ", "(", ")");
 
         for (var par : method.parameters.values())
-            sj.add(par.simpleType);
+            sj.add(getTypeJavaDocSignature(par.simpleType));
 
         return method.simpleName + sj;
+    }
+
+    private static String getTypeJavaDocSignature(final String type) {
+        if (type.startsWith("array<")) {
+            int startPos = "array<".length();
+            int endPos = type.length() - 1;
+            return getTypeJavaDocSignature(type.substring(startPos, endPos)) + "[]";
+        }
+
+        return type;
     }
 
     private String getUniqueSuffix(final MethodSummary method) {
@@ -88,8 +98,8 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
     }
 
     private void renderClassHeader() {
-        out.add("@").add(ANNOTATION_NAME);
-        out.add("@").add(WARNING_SUPPRESSION);
+        out.add("@").addln(ANNOTATION_NAME);
+        out.add("@").addln(WARNING_SUPPRESSION);
         out.add("public final class %s ", outputClassName);
     }
 
