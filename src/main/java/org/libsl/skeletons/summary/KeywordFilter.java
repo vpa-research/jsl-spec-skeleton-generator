@@ -13,6 +13,7 @@ public final class KeywordFilter {
             "is", "has", "as",
             "this", "self", "target",
             "var", "val",
+            "array", "map", "list",
     });
 
     private KeywordFilter() {
