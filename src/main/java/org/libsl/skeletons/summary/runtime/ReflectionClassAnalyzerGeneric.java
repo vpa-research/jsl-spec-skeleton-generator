@@ -8,6 +8,7 @@ import org.libsl.skeletons.summary.ClassSummaryProducer;
 import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.summary.bytecode.ParameterNameMiner;
 import org.libsl.skeletons.util.ReflectionUtils;
+import org.libsl.skeletons.util.StringUtils;
 import org.objectweb.asm.*;
 
 import java.lang.reflect.*;
@@ -27,7 +28,7 @@ public final class ReflectionClassAnalyzerGeneric implements ClassSummaryProduce
                                           final boolean includeInheritedMethods) {
         this.source = source;
         this.summary = new ClassSummary(
-                source.getSimpleName(),
+                StringUtils.getCompleteClassName(source.getTypeName()),
                 source.getPackageName(),
                 source.getTypeName(),
                 Modifier.isAbstract(source.getModifiers()),

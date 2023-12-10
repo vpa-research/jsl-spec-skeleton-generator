@@ -3,6 +3,7 @@ package org.libsl.skeletons.summary.bytecode;
 import org.libsl.skeletons.sources.bytecode.BytecodeLoader;
 import org.libsl.skeletons.summary.ClassSummary;
 import org.libsl.skeletons.summary.ClassSummaryProducer;
+import org.libsl.skeletons.util.StringUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 
@@ -27,7 +28,7 @@ public final class BytecodeClassAnalyzer implements ClassSummaryProducer {
 
         final var flags = source.getAccess();
         this.summary = new ClassSummary(
-                simpleName,
+                StringUtils.getCompleteClassName(simpleName),
                 packageName,
                 canonicalName,
                 hasFlag(flags, Opcodes.ACC_ABSTRACT),

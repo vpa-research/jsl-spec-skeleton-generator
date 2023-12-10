@@ -1,18 +1,20 @@
 package org.libsl.skeletons.summary.runtime;
 
+import org.libsl.skeletons.util.StringUtils;
+
 final class TypeSplitter {
     private TypeSplitter() {
     }
 
     private static TypeSummary splitArray(final Class<?> type) {
         return new TypeSummary(
-                "array<" + type.getComponentType().getSimpleName() + ">"
+                "array<" + StringUtils.getCompleteClassName(type.getComponentType()) + ">"
         );
     }
 
     private static TypeSummary splitClass(final Class<?> type) {
         return new TypeSummary(
-                type.getSimpleName()
+                StringUtils.getCompleteClassName(type)
         );
     }
 

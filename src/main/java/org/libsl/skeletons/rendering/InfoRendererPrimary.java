@@ -13,6 +13,7 @@ import static org.libsl.skeletons.summary.Annotations.*;
 public final class InfoRendererPrimary extends AbstractInfoRenderer {
     private static final String METHOD_NAME_PREFIX = "*.";
     private static final String ORIGIN_URL_PREFIX = "https://github.com/openjdk/jdk11/blob/master/src/java.base/share/classes";
+    private static final String CONSTRUCTOR_DEFAULT_NAME = "init";
 
     private final ClassSummary summary;
     private final String automatonName;
@@ -41,8 +42,10 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
                 out.add(ann).add(" ");
 
         // keyword + name
-        final var fullMethodName = METHOD_NAME_PREFIX + method.simpleName;
-        out.add(method.isConstructor ? CONSTRUCTOR : FUNCTION).add(" ").add(fullMethodName);
+        if (method.isConstructor)
+            out.add(CONSTRUCTOR).add(" ").add(METHOD_NAME_PREFIX).add(CONSTRUCTOR_DEFAULT_NAME);
+        else
+            out.add(FUNCTION).add(" ").add(METHOD_NAME_PREFIX).add(method.simpleName);
 
         // parameters
         out.add(" (");

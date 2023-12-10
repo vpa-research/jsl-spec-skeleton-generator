@@ -1,5 +1,6 @@
 package org.libsl.skeletons.util;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +73,15 @@ public final class StringUtils {
         return s.startsWith("`")
                 ? s.substring(1, s.length() - 2)
                 : s;
+    }
+
+    public static String getCompleteClassName(final String typeName) {
+        return typeName
+                .substring(typeName.lastIndexOf('.') + 1)
+                .replace('$', '_');
+    }
+
+    public static String getCompleteClassName(final Type type) {
+        return getCompleteClassName(type.getTypeName());
     }
 }
