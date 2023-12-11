@@ -41,13 +41,13 @@ import "list-actions.lsl";
 
     // constructors
 
-    @private constructor Optional ()
+    @private constructor `<init>` ()
     {
         action TODO();
     }
 
 
-    @private constructor Optional (value: T)
+    @private constructor `<init>` (value: T)
     {
         action TODO();
     }

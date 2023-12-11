@@ -44,31 +44,31 @@ import "list-actions.lsl";
 
     // constructors
 
-    constructor HashSet ()
+    constructor `<init>` ()
     {
         action TODO();
     }
 
 
-    constructor HashSet (@Parameterized(["? extends E"]) c: Collection)
+    constructor `<init>` (@Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor HashSet (initialCapacity: int)
+    constructor `<init>` (initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor HashSet (initialCapacity: int, loadFactor: float)
+    constructor `<init>` (initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
 
 
-    @private constructor HashSet (initialCapacity: int, loadFactor: float, dummy: boolean)
+    @private constructor `<init>` (initialCapacity: int, loadFactor: float, dummy: boolean)
     {
         action TODO();
     }

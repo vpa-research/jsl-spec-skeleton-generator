@@ -53,25 +53,25 @@ import "list-actions.lsl";
 
     // constructors
 
-    constructor `HashMap#HashMap` (@target obj: HashMap)
+    constructor `HashMap#<init>` (@target obj: HashMap)
     {
         action TODO();
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) m: Map)
+    constructor `HashMap#<init>` (@target obj: HashMap, @Parameterized(["? extends K", "? extends V"]) m: Map)
     {
         action TODO();
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, initialCapacity: int)
+    constructor `HashMap#<init>` (@target obj: HashMap, initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor `HashMap#HashMap` (@target obj: HashMap, initialCapacity: int, loadFactor: float)
+    constructor `HashMap#<init>` (@target obj: HashMap, initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }

@@ -3,12 +3,15 @@ package org.libsl.skeletons.util;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Java-specific string utility classes.
  */
 public final class StringUtils {
     private static final List<Pair<String, String>> ESCAPE_PAIRS = new ArrayList<>();
+    private static final Predicate<String> PATTERN_IDENTIFIER = Pattern.compile("[A-Za-z0-9_]+").asMatchPredicate();
 
     static {
         esc_map("\\", "\\\\");
@@ -72,6 +75,12 @@ public final class StringUtils {
     public static String removeBackticks(final String s) {
         return s.startsWith("`")
                 ? s.substring(1, s.length() - 2)
+                : s;
+    }
+
+    public static String addBackticksIfNecessary(final String s) {
+        return !PATTERN_IDENTIFIER.test(s)
+                ? "`" + s + "`"
                 : s;
     }
 

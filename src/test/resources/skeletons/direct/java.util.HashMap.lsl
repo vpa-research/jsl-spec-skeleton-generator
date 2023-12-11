@@ -47,25 +47,25 @@ import "list-actions.lsl";
 
     // constructors
 
-    constructor HashMap ()
+    constructor `<init>` ()
     {
         action TODO();
     }
 
 
-    constructor HashMap (@Parameterized(["? extends K", "? extends V"]) m: Map)
+    constructor `<init>` (@Parameterized(["? extends K", "? extends V"]) m: Map)
     {
         action TODO();
     }
 
 
-    constructor HashMap (initialCapacity: int)
+    constructor `<init>` (initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor HashMap (initialCapacity: int, loadFactor: float)
+    constructor `<init>` (initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }

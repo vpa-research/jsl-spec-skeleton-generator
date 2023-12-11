@@ -3,6 +3,8 @@ package org.libsl.skeletons.summary;
 import java.util.*;
 
 public final class ClassSummary {
+    public static final String CONSTRUCTOR_NAME = "<init>";
+
     public final String simpleName;
     public final String packageName;
     public final String typeName;
@@ -46,8 +48,8 @@ public final class ClassSummary {
         return constructors.computeIfAbsent(
                 signature,
                 k -> {
-                    countMethodOverload(simpleName);
-                    return new MethodSummary(simpleName, signature, MethodSummary.Kind.CONSTRUCTOR, simpleName);
+                    countMethodOverload(CONSTRUCTOR_NAME);
+                    return new MethodSummary(CONSTRUCTOR_NAME, signature, MethodSummary.Kind.CONSTRUCTOR, simpleName);
                 });
     }
 

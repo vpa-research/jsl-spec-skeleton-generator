@@ -37,7 +37,7 @@ import "list-actions.lsl";
 
     // constructors
 
-    @private constructor GenericsDummy ()
+    @private constructor `<init>` ()
     {
         action TODO();
     }

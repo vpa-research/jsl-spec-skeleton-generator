@@ -51,19 +51,19 @@ import "list-actions.lsl";
 
     // constructors
 
-    constructor ArrayList ()
+    constructor `<init>` ()
     {
         action TODO();
     }
 
 
-    constructor ArrayList (@Parameterized(["? extends E"]) c: Collection)
+    constructor `<init>` (@Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor ArrayList (initialCapacity: int)
+    constructor `<init>` (initialCapacity: int)
     {
         action TODO();
     }

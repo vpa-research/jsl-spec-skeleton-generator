@@ -5,6 +5,7 @@ import org.libsl.skeletons.summary.KeywordFilter;
 import org.libsl.skeletons.summary.MethodSummary;
 import org.libsl.skeletons.summary.VariableSummary;
 import org.libsl.skeletons.util.PrettyPrinter;
+import org.libsl.skeletons.util.StringUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,9 @@ public final class InfoRendererDirect extends AbstractInfoRenderer {
                 out.add(ann).add(" ");
 
         // keyword + name
-        out.add(method.isConstructor ? CONSTRUCTOR : FUNCTION).add(" ").add(method.simpleName);
+        out.add(method.isConstructor ? CONSTRUCTOR : FUNCTION).add(" ").add(
+                StringUtils.addBackticksIfNecessary(method.simpleName)
+        );
 
         // parameters
         out.add(" (");

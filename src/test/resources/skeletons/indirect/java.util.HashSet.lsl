@@ -50,31 +50,31 @@ import "list-actions.lsl";
 
     // constructors
 
-    constructor `HashSet#HashSet` (@target obj: HashSet)
+    constructor `HashSet#<init>` (@target obj: HashSet)
     {
         action TODO();
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, @Parameterized(["? extends E"]) c: Collection)
+    constructor `HashSet#<init>` (@target obj: HashSet, @Parameterized(["? extends E"]) c: Collection)
     {
         action TODO();
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int)
+    constructor `HashSet#<init>` (@target obj: HashSet, initialCapacity: int)
     {
         action TODO();
     }
 
 
-    constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int, loadFactor: float)
+    constructor `HashSet#<init>` (@target obj: HashSet, initialCapacity: int, loadFactor: float)
     {
         action TODO();
     }
 
 
-    @private constructor `HashSet#HashSet` (@target obj: HashSet, initialCapacity: int, loadFactor: float, dummy: boolean)
+    @private constructor `HashSet#<init>` (@target obj: HashSet, initialCapacity: int, loadFactor: float, dummy: boolean)
     {
         action TODO();
     }

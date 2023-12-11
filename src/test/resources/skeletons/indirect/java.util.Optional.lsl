@@ -47,13 +47,13 @@ import "list-actions.lsl";
 
     // constructors
 
-    @private constructor `Optional#Optional` (@target obj: Optional)
+    @private constructor `Optional#<init>` (@target obj: Optional)
     {
         action TODO();
     }
 
 
-    @private constructor `Optional#Optional` (@target obj: Optional, value: T)
+    @private constructor `Optional#<init>` (@target obj: Optional, value: T)
     {
         action TODO();
     }
