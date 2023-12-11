@@ -1,0 +1,112 @@
+package approximations.java.util;
+
+import approximations.Test;
+
+import java.lang.Object;
+import java.lang.String;
+import java.util.function.IntConsumer;
+
+import java.util.IntSummaryStatistics;
+
+@Test
+@SuppressWarnings({"unused"})
+public final class IntSummaryStatistics_Tests {
+
+    // internal variables
+
+    // constructors
+
+    /**
+     * {@link java.util.IntSummaryStatistics#IntSummaryStatistics()}
+     */
+    @Test
+    public static int test_IntSummaryStatistics_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#IntSummaryStatistics(long, int, int, long)}
+     */
+    @Test
+    public static int test_IntSummaryStatistics_1(final int execution) {
+        return -1;
+    }
+
+
+    // static methods
+
+    // methods
+
+    /**
+     * {@link java.util.IntSummaryStatistics#accept(int)}
+     */
+    @Test
+    public static int test_accept_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#combine(IntSummaryStatistics)}
+     */
+    @Test
+    public static int test_combine_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#getAverage()}
+     */
+    @Test
+    public static int test_getAverage_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#getCount()}
+     */
+    @Test
+    public static int test_getCount_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#getMax()}
+     */
+    @Test
+    public static int test_getMax_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#getMin()}
+     */
+    @Test
+    public static int test_getMin_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#getSum()}
+     */
+    @Test
+    public static int test_getSum_0(final int execution) {
+        return -1;
+    }
+
+
+    /**
+     * {@link java.util.IntSummaryStatistics#toString()}
+     */
+    @Test
+    public static int test_toString_0(final int execution) {
+        return -1;
+    }
+
+}

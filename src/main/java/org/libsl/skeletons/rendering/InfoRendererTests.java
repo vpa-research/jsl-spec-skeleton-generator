@@ -54,8 +54,7 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         out.add(METHOD_RETURN_TYPE).add(" ");
 
         // keyword + name
-        final var fullMethodName = METHOD_NAME_PREFIX + method.simpleName + "_" + getUniqueSuffix(method);
-        out.add(fullMethodName);
+        out.add(METHOD_NAME_PREFIX + fixSpecialName(method.simpleName) + "_" + getUniqueSuffix(method));
 
         // parameters
         out.add("(%s) ", "final int execution");
@@ -76,7 +75,14 @@ public final class InfoRendererTests extends AbstractInfoRenderer {
         for (var par : method.parameters.values())
             sj.add(getTypeJavaDocSignature(par.simpleType));
 
-        return method.simpleName + sj;
+        return fixSpecialName(method.simpleName) + sj;
+    }
+
+    private String fixSpecialName(final String name) {
+        if (ClassSummary.CONSTRUCTOR_NAME.equals(name))
+            return summary.simpleName;
+
+        return name;
     }
 
     private static String getTypeJavaDocSignature(final String type) {
