@@ -58,14 +58,14 @@ automaton IntSummaryStatisticsAutomaton
 
     // constructors
 
-    fun *.`<init>` (@target self: IntSummaryStatistics)
+    constructor *.`<init>` (@target self: IntSummaryStatistics)
     {
         action TODO();
     }
 
 
     @throws(["java.lang.IllegalArgumentException"])
-    fun *.`<init>` (@target self: IntSummaryStatistics, count: long, min: int, max: int, sum: long)
+    constructor *.`<init>` (@target self: IntSummaryStatistics, count: long, min: int, max: int, sum: long)
     {
         action TODO();
     }

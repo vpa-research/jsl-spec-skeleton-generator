@@ -42,7 +42,8 @@ public final class InfoRendererPrimary extends AbstractInfoRenderer {
                 out.add(ann).add(" ");
 
         // keyword + name
-        out.add(FUNCTION).add(" ").add(METHOD_NAME_PREFIX).add(StringUtils.addBackticksIfNecessary(
+        final var kwd = method.isConstructor ? CONSTRUCTOR : FUNCTION;
+        out.add(kwd).add(" ").add(METHOD_NAME_PREFIX).add(StringUtils.addBackticksIfNecessary(
                 method.simpleName
         ));
 
